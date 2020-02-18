@@ -55,16 +55,22 @@ application
         tasks.register("qemuBios${binary.name.capitalize()}", QemuExec) {
             system 'i386'
             bios grubQemu.get().target
+            gdb 'tcp::1234'
+            start false
         }
         
         tasks.register("qemuPc${binary.name.capitalize()}", QemuExec) {
             system 'i386'
             kernel grubPc.get().target
+            gdb 'tcp::1234'
+            start false
         }
         
         tasks.register("qemuRescue${binary.name.capitalize()}", QemuExec) {
             system 'i386'
             cdrom grubRescue.get().target
+            gdb 'tcp::1234'
+            start false
         }
     	
     	grub.dependsOn grubPc, grubQemu, grubRescue
