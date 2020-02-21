@@ -14,19 +14,19 @@ Let `binary` be a `CppExecutable`:
 
 ```gradle
 tasks.register("grubRescue_${binary.name}", aasgard.gradle.grub.GrubRescueCompile) {
-    binaryName binary.name
-    sources 'src/main/grub', binary.linkerTask()
+    executable binary
 }
 ```
+
+`GrubRescueCompile` shall create a GRUB image with the binary and appropriate configuration.
 
 ## `aasgard.gradle.grub.GrubRescueCompile`
 
 Properties:
 
-- `binaryName` — unique name of binary configuration
+- `executable` — `CppExecutable` to install
 - `install` — modules to install
 - `load` — modules to pre-load
-- `sources` — configurable file collection of sources
 
 ## references
 
