@@ -8,7 +8,7 @@
 //! @brief C++ entry point
 
 // extern "C"
-// void __attribute__((fastcall)) main ( std::uint32_t magic, multiboot2::information_list & mbi )
+// void [[gnu::fastcall]] main ( std::uint32_t magic, multiboot2::information_list & mbi )
 
 .extern main
 

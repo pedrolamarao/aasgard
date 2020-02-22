@@ -1,11 +1,3 @@
-define kq
-	set confirm off
-	kill
-	quit
-end
-dir .
-file xxx--multiboot2-x86--io.bin/aasgard
-break exception
-break interrupt
 target remote localhost:1234
+hbreak _start
 continue

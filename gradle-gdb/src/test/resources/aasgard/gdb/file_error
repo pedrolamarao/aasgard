@@ -1,0 +1,4 @@
+&"file buexe/main/debug/test-multiboot2-ia32-start\n"
+&"buexe/main/debug/test-multiboot2-ia32-start: No such file or directory.\n"
+^error,msg="buexe/main/debug/test-multiboot2-ia32-start: No such file or directory."
+(gdb)
