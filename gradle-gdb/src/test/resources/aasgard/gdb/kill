@@ -1,4 +1,4 @@
 =thread-group-exited,id="i1"
 ~"[Inferior 1 (Remote target) killed]\n"
 ^done
-(gdb)
+(gdb) 

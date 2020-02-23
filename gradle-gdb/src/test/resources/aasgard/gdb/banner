@@ -11,4 +11,4 @@
 ~"\n\n"
 ~"For help, type \"help\".\n"
 ~"Type \"apropos word\" to search for commands related to \"word\".\n"
-(gdb)
+(gdb) 

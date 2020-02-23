@@ -34,26 +34,26 @@ public class LexerTest
 				"~", "\"\\n\\n\"",
 				"~", "\"For help, type \\\"help\\\".\\n\"",
 				"~", "\"Type \\\"apropos word\\\" to search for commands related to \\\"word\\\".\\n\"",
-				"(gdb)"
+				"(gdb) "
 			)),
 			arguments("file", Arrays.asList(
 				"&", "\"file test-multiboot2-ia32-start/build/exe/main/debug/test-multiboot2-ia32-start\\n\"",
 				"~", "\"Reading symbols from test-multiboot2-ia32-start/build/exe/main/debug/test-multiboot2-ia32-start...\\n\"",
 				"^", "done",
-				"(gdb)"
+				"(gdb) "
 			)),
 			arguments("file_error", Arrays.asList(
 				"&", "\"file buexe/main/debug/test-multiboot2-ia32-start\\n\"",
 				"&", "\"buexe/main/debug/test-multiboot2-ia32-start: No such file or directory.\\n\"",
 				"^", "error", ",", 
 					"msg", "=", "\"buexe/main/debug/test-multiboot2-ia32-start: No such file or directory.\"",
-				"(gdb)"
+				"(gdb) "
 			)),
 			arguments("kill", Arrays.asList(
 				"=", "thread-group-exited", ",", "id", "=" ,"\"i1\"",
 				"~", "\"[Inferior 1 (Remote target) killed]\\n\"",
 				"^", "done",
-				"(gdb)"
+				"(gdb) "
 			)),
 			arguments("target_remote", Arrays.asList(
 				"&", "\"target remote localhost:1234\\n\"",
@@ -75,7 +75,7 @@ public class LexerTest
 					"thread-id", "=", "\"1\"", ",",
 					"stopped-threads", "=", "\"all\"",
 				"^", "done",
-				"(gdb)"
+				"(gdb) "
 			)),
 			arguments("target_remote_warning", Arrays.asList(
 				"&", "\"target remote localhost:1234\\n\"",
@@ -99,7 +99,7 @@ public class LexerTest
 					"thread-id", "=", "\"1\"", ",",
 					"stopped-threads", "=", "\"all\"",
 				"^", "done",
-				"(gdb)"
+				"(gdb) "
 			)),
 			arguments("thbreak", Arrays.asList(
 				"~", "\"Hardware assisted breakpoint 1 at 0x105f\\n\"",
@@ -116,7 +116,7 @@ public class LexerTest
 						"original-location", "=", "\"_start\"", 
 					"}",
 				"^", "done",
-				"(gdb)"
+				"(gdb) "
 			))
 		);
 	}

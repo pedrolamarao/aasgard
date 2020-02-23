@@ -5,4 +5,4 @@
 ~"0x0000fff0 in ?? ()\n"
 *stopped,frame={addr="0x0000fff0",func="??",args=[],arch="i386"},thread-id="1",stopped-threads="all"
 ^done
-(gdb)
+(gdb) 
