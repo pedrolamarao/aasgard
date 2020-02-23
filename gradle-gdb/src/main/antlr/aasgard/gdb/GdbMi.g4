@@ -6,20 +6,24 @@ package aasgard.gdb;
 
 // rule
 
-output : outOfBand* resultRecord? GDB NL ;
-outOfBand : asyncRecord | streamOutput ;
+output : outOfBand* resultRecord? gdb ;
+
+outOfBand : execAsyncRecord
+    | statusAsyncRecord
+    | notifyAsyncRecord
+    | consoleStreamOutput
+    | targetStreamOutput
+    | logStreamOutput
+    ;
 
 resultRecord : CIRCUMFLEX record NL ;
-
-asyncRecord : execAsyncRecord | notifyAsyncRecord ;
 execAsyncRecord : ASTERISK record NL ;
 statusAsyncRecord : PLUS record NL ;
 notifyAsyncRecord : EQUALS record NL ;
-
-streamOutput : consoleStreamOutput | targetStreamOutput | logStreamOutput ;
 consoleStreamOutput : TILDE constant NL ;
 targetStreamOutput : AT constant NL ;
 logStreamOutput : AND constant NL ;
+gdb : GDB NL ;
 
 record : classs ( COMMA result )* ;
 classs : STRING ;
@@ -53,6 +57,6 @@ TILDE : '~' ;
 
 // lexeme — sequences
 
-GDB : '(gdb)' ;
+GDB : '(gdb) ' ;
 QSTRING : '"' ( ~["] | ( '\\"' ) )+ '"' ;
 STRING : [\-a-z]+ ;
