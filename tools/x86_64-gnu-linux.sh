@@ -40,7 +40,7 @@ if [ $? -ne 0 ]; then exit $?; fi
 env -C ${OBJ}/gcc PATH="${TMP}/${PREFIX}/bin:${PATH}" make ${MFLAGS} all-gcc all-target-libgcc
 if [ $? -ne 0 ]; then exit $?; fi
 
-env -C ${OBJ}/gcc DESTDIR=${TMP} make install-gcc install-target-libgcc
+env -C ${OBJ}/gcc DESTDIR=${TMP} PATH="${TMP}/${PREFIX}/bin:${PATH}" make install-gcc install-target-libgcc
 if [ $? -ne 0 ]; then exit $?; fi
 
 # GDB
