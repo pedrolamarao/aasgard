@@ -25,6 +25,21 @@ import org.gradle.language.cpp.CppExecutable;
 
 public abstract class GrubRescueCompile extends DefaultTask
 {
+	// life
+	
+	public GrubRescueCompile ()
+	{
+		final var project = getProject();
+		final var layout = project.getLayout();
+		final var build = layout.getBuildDirectory();
+		final var source = getExecutable().flatMap(binary -> binary.getLinkTask().flatMap(link -> link.getLinkedFile()));
+		getSource().set(source);
+		final var target = getExecutable().flatMap(s -> build.file("grub/bin/" + s.getName() + "/rescue/image"));
+		getTarget().set(target);
+	}
+
+	// properties
+	
 	public abstract Property<CppExecutable> getExecutable ();
 	
 	@Input
@@ -48,16 +63,7 @@ public abstract class GrubRescueCompile extends DefaultTask
 	@OutputFile
 	public abstract RegularFileProperty getTarget ();
 	
-	public GrubRescueCompile ()
-	{
-		final var project = getProject();
-		final var layout = project.getLayout();
-		final var build = layout.getBuildDirectory();
-		final var source = getExecutable().flatMap(binary -> binary.getLinkTask().flatMap(link -> link.getLinkedFile()));
-		getSource().set(source);
-		final var target = getExecutable().flatMap(s -> build.file("grub/bin/" + s.getName() + "/rescue/image"));
-		getTarget().set(target);
-	}
+	// accessors
 	
 	public void install (String... value)
 	{
@@ -74,6 +80,8 @@ public abstract class GrubRescueCompile extends DefaultTask
 		getExecutable().set(value);
 	}
 	
+	// action
+	
 	private static final String template = 
 		"default=0\r\n" + 
 		"timeout=0\r\n" + 
@@ -83,7 +91,7 @@ public abstract class GrubRescueCompile extends DefaultTask
 		"}\r\n";
 	
 	@TaskAction
-	public void action ()
+	public void action () throws IOException
 	{
 		final var project = getProject();
 		final var layout = project.getLayout();
@@ -102,10 +110,6 @@ public abstract class GrubRescueCompile extends DefaultTask
 			 Writer writer = Channels.newWriter(file, US_ASCII))
 		{
 			writer.append(format(template, executableFile.get().getAsFile().getName()));
-		} 
-		catch (IOException e) 
-		{
-			throw new RuntimeException(e);
 		}
 		
 		// Compile GRUB rescue image
