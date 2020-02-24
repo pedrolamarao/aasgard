@@ -1,0 +1,4 @@
+&"file test-multiboot2-ia32-start/build/exe/main/debug/test-multiboot2-ia32-start\n"
+~"Reading symbols from test-multiboot2-ia32-start/build/exe/main/debug/test-multiboot2-ia32-start...\n"
+^done
+(gdb) 

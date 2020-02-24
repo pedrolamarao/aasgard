@@ -1,0 +1,44 @@
+plugins 
+{
+    id 'antlr'
+    id 'java-gradle-plugin'
+}
+
+group 'aasgard'
+version '0.1.0-SNAPSHOT'
+
+gradlePlugin 
+{
+    plugins 
+    {
+        asm 
+        {
+            id = 'aasgard.gdb'
+            implementationClass = 'aasgard.gradle.gdb.GdbPlugin'
+        }
+    }
+}
+
+repositories 
+{
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies 
+{
+    antlr group: 'org.antlr', name: 'antlr4', version: '4.8'
+    
+    testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.5.2'  
+
+    testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2'
+    testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.5.2' // XXX: JDT
+}
+
+// tasks
+
+test.configure {
+    useJUnitPlatform()
+}

@@ -1,0 +1,4 @@
+~"Hardware assisted breakpoint 1 at 0x105f\n"
+=breakpoint-created,bkpt={number="1",type="hw breakpoint",disp="del",enabled="y",addr="0x0000105f",at="<_start>",thread-groups=["i1"],times="0",original-location="_start"}
+^done
+(gdb) 

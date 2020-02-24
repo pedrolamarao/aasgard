@@ -3,11 +3,13 @@
 plugins
 {
     id 'aasgard.asm' version '0.1.0-SNAPSHOT'
+    id 'aasgard.gdb' version '0.1.0-SNAPSHOT'
     id 'aasgard.grub' version '0.1.0-SNAPSHOT'
     id 'aasgard.qemu' version '0.1.0-SNAPSHOT'
     id 'cpp-application'
 }
 
+def GdbExec = aasgard.gradle.gdb.GdbExec
 def QemuExec = aasgard.gradle.qemu.QemuExec
 
 // project
@@ -72,6 +74,10 @@ application
             gdb 'tcp::1234'
             start false
         }
+        
+        tasks.register("gdb${binary.name.capitalize()}", GdbExec) {
+            file linker.linkedFile
+        }        
     	
     	grub.dependsOn grubPc, grubQemu, grubRescue
     }

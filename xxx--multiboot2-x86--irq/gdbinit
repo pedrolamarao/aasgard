@@ -1,11 +1,3 @@
-define kq
-	set confirm off
-	kill
-	quit
-end
-dir .
-file xxx--multiboot2-x86--irq.bin/aasgard
-hbreak __interrupt_service_routine
-break main
 target remote localhost:1234
+hbreak _start
 continue
