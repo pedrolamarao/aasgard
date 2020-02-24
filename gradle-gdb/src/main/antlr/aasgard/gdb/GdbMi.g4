@@ -6,7 +6,10 @@ package aasgard.gdb;
 
 // rule
 
-output : outOfBand* resultRecord? gdb ;
+output : ( outOfBand | resultRecord )* gdb ;
+
+// documentation states below but gdb 9.1 behaves otherwise
+// output : outOfBand* resultRecord? gdb ;
 
 outOfBand : execAsyncRecord
     | statusAsyncRecord
@@ -36,7 +39,7 @@ constant : QSTRING ;
 tuple : LBRACE ( result ( COMMA result )* )? RBRACE ;
 list : ( LBRACKET ( value ( COMMA value )* )? RBRACKET ) ;
 
-// actually, below, but ambigous
+// documentation states below but ambiguous so ignore
 // list : ( LBRACKET ( value ( COMMA value )* )? RBRACKET ) | ( LBRACKET ( result ( COMMA result )* )? RBRACKET ) ;
 
 // lexeme — symbols
