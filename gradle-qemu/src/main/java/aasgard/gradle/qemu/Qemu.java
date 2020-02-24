@@ -11,7 +11,7 @@ import org.gradle.api.provider.Provider;
 
 public final class Qemu 
 {
-	public static void system (QemuSystemSpec spec) throws IOException
+	public static Process system (QemuSystemSpec spec) throws IOException
 	{
 		final var command = new ArrayList<String>();
 		command.add(spec.getArchitecture().map(it -> "qemu-system-" + it).get());
@@ -25,7 +25,7 @@ public final class Qemu
 		final var builder = new ProcessBuilder(command);
 		final var environment = builder.environment();
 		spec.getEnvironment().get().forEach((key, value) -> environment.put(key, value));
-		builder.start();
+		return builder.start();
 	}
 	
 	public static void addAll (List<String> list, String... values)

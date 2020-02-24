@@ -27,10 +27,10 @@ public abstract class QemuExtension
 		return getTasks().register(name, QemuSystemExec.class, action);
 	}
 	
-	public void system (Action<? super QemuSystemSpec> configure) throws IOException
+	public Process system (Action<? super QemuSystemSpec> configure) throws IOException
 	{
 		var spec = getObjects().newInstance(QemuSystemSpec.class);
 		configure.execute(spec);	
-		Qemu.system(spec);
+		return Qemu.system(spec);
 	}
 }
