@@ -21,7 +21,7 @@ public final class Gdb
 		spec.getEnvironment().get().forEach((key, value) -> builder.environment().put(key, value));
 
 		final var gdb = new GdbMiProcess(builder.start());
-		spec.getScript().get().call(gdb);
+		spec.getScript().get().execute(gdb);
 	}
 	
 	public static void addAll (List<String> list, String... values)

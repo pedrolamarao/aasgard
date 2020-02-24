@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
+import org.gradle.api.Action;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.model.ObjectFactory;
@@ -12,8 +13,6 @@ import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.TaskAction;
-
-import groovy.lang.Closure;
 
 
 public abstract class GdbExec extends DefaultTask
@@ -40,7 +39,14 @@ public abstract class GdbExec extends DefaultTask
 	public RegularFileProperty getTarget () { return spec.getTarget(); }
 	
 	@Input
-	public Property<Closure<GdbMiProcess>> getScript () { return spec.getScript(); }
+	public Property<Action<? super GdbMiProcess>> getScript () { return spec.getScript(); }
+	
+	// accessors
+	
+	public void script (Action<? super GdbMiProcess> action)
+	{
+		getScript().set(action);
+	}
 	
 	// task
 	

@@ -6,8 +6,6 @@ import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 
-import groovy.lang.Closure;
-
 
 public abstract class GdbSpec extends DefaultTask
 {
@@ -26,7 +24,7 @@ public abstract class GdbSpec extends DefaultTask
 	
 	public abstract Property<String> getExecutable ();
 	
-	public abstract Property<Closure<GdbMiProcess>> getScript ();
+	public abstract Property<Action<? super GdbMiProcess>> getScript ();
 	
 	public abstract RegularFileProperty getTarget ();
 
