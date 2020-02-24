@@ -29,6 +29,11 @@ public final class GdbMiProcess
 		return parser.poll(time, unit);
 	}
 	
+	public OutputContext poll (int time) throws InterruptedException
+	{
+		return parser.poll(time, TimeUnit.MILLISECONDS);
+	}
+	
 	public void push (String request) throws IOException
 	{
 		assembler.append(request).append('\n').flush();
@@ -37,5 +42,10 @@ public final class GdbMiProcess
 	public boolean waitFor (int time, TimeUnit unit) throws InterruptedException
 	{
 		return process.waitFor(time, unit);
+	}
+	
+	public boolean waitFor (int time) throws InterruptedException
+	{
+		return process.waitFor(time, TimeUnit.MILLISECONDS);
 	}
 }
