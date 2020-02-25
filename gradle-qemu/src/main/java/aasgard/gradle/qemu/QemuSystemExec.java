@@ -2,11 +2,8 @@ package aasgard.gradle.qemu;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
-
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.RegularFileProperty;
-import org.gradle.api.model.ObjectFactory;
 import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
@@ -20,10 +17,10 @@ public abstract class QemuSystemExec extends DefaultTask
 	
 	// life
 	
-	@Inject
-	public QemuSystemExec (ObjectFactory objects)
+	public QemuSystemExec ()
 	{
-		this.spec = objects.newInstance(QemuSystemSpec.class);
+		this.spec = getProject().getObjects().newInstance(QemuSystemSpec.class);
+		this.spec.getTemporaryDir().set(getProject().getLayout().getBuildDirectory().dir("tmp/" + getName()));
 	}
 	
 	// properties
@@ -62,6 +59,7 @@ public abstract class QemuSystemExec extends DefaultTask
 	@TaskAction
 	public void action () throws IOException
 	{
+		getProject().mkdir(getTemporaryDir());
 		Qemu.system(spec);
 	}
 }

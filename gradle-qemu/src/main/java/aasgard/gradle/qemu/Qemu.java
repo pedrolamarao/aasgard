@@ -22,9 +22,14 @@ public final class Qemu
 		ifPresent(spec.getProcessor(), it -> addAll(command, "-cpu", it));
 		if (! spec.getStart().get()) { command.add("-S"); }
 		
+		final var err = spec.getTemporaryDir().file("err.txt");
+		final var out = spec.getTemporaryDir().file("out.txt");
+		
 		final var builder = new ProcessBuilder(command);
 		final var environment = builder.environment();
 		spec.getEnvironment().get().forEach((key, value) -> environment.put(key, value));
+		builder.redirectError(err.get().getAsFile());
+		builder.redirectOutput(out.get().getAsFile());
 		return builder.start();
 	}
 	

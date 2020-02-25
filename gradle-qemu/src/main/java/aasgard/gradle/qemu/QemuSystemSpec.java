@@ -1,6 +1,7 @@
 package aasgard.gradle.qemu;
 
 import org.gradle.api.Action;
+import org.gradle.api.file.DirectoryProperty;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
@@ -31,6 +32,8 @@ public abstract class QemuSystemSpec
 	public abstract Property<String> getProcessor ();
 
 	public abstract Property<Boolean> getStart ();
+	
+	public abstract DirectoryProperty getTemporaryDir ();
 	
 	// utilities
 	
