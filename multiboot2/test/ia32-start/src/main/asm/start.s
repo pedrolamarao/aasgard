@@ -1,3 +1,5 @@
+// Copyright (C) 2020 Pedro Lamarão <pedro.lamarao@gmail.com>. All rights reserved.
+
 .att_syntax
 
 .text
@@ -5,27 +7,28 @@
 .set STACK_SIZE , 0x4000
 .comm stack , STACK_SIZE
 
-//! @brief ELF default entry point
-//!
-//! @param %eax  Multiboot2 information magic number
-//! @param %ebx  Multiboot2 information list address
+.extern _test_result
 
-.global _start
-.type   _start, STT_FUNC
-.func   _start, _start
+.global  _start
 _start:
-    movl $(stack + STACK_SIZE), %esp
-    push $0
-    popf
-    movb $0, _test_result(,1)
-.Lloop:
-    hlt
-    jmp .Lloop
-.endfunc
-
-//! @brief Test result
-
-.global _test_result
-.type   _test_result, STT_OBJECT
-_test_result:
-    .byte 0xFF
+        jmp     multiboot_entry
+        .align  8
+multiboot_header:
+        .long   0xe85250d6
+        .long   0
+        .long   multiboot_header_end - multiboot_header
+        .long   -(0xe85250d6 + 0 + (multiboot_header_end - multiboot_header))
+multiboot_end:
+        .short 0
+        .short 0
+        .long 8
+multiboot_header_end:
+multiboot_entry:
+        movl    $(stack + 0x4000), %esp
+        pushl   $0
+        popf
+        pushl   %ebx
+        pushl   %eax
+        movb    $0, _test_result
+loop:   hlt
+        jmp     loop
