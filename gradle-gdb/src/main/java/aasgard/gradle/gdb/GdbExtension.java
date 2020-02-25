@@ -1,6 +1,11 @@
 package aasgard.gradle.gdb;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.file.Files;
 
 import javax.inject.Inject;
 
@@ -32,6 +37,12 @@ public abstract class GdbExtension
 	public TaskProvider<GdbExec> register (String name, Action<? super GdbExec> action)
 	{
 		return getTasks().register(name, GdbExec.class, action);
+	}
+	
+	public GdbMiLogListener logListener (File file) throws FileNotFoundException, IOException
+	{
+		Files.createDirectories(file.toPath().getParent());
+		return new GdbMiLogListener(new OutputStreamWriter(new FileOutputStream(file)));
 	}
 	
 	public GdbMiTestListener testListener (String symbol)
