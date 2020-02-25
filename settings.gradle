@@ -12,8 +12,3 @@ include 'c++-x86'
 include 'multiboot2'
 include 'pc'
 include 'x86'
-
-// programs
-include 'xxx--multiboot2-x86--minimal'
-include 'xxx--multiboot2-x86--irq'
-include 'xxx--multiboot2-x86--io'
