@@ -1,3 +1,8 @@
+plugins
+{
+    id 'base'
+}
+
 subprojects 
 {
     // settings
@@ -46,12 +51,14 @@ subprojects
                 dependsOn grubRescue
                 executable = 'i686-pc-elf-gdb'
                 listeners.add gdbTest
+                listeners.add gdb.logListener(file("build/tmp/gdbRescue${suffix}/mi.txt"))
                 target = binary.executableFile
                 script {
                     def qp = qemu.system {
                         architecture = 'i386'
                         cdrom = grubRescue.get().target
                         gdb = 'tcp::1234'
+                        display = 'none'
                         start = false
                     }
                     push 'set output-radix 16'
@@ -62,11 +69,13 @@ subprojects
                     push 'continue'
                     synchronized (gdbTest) { gdbTest.wait(5000); }
                     logger.lifecycle '_test_result = ' + gdbTest.value
-                    push 'kill'
+                    qp.destroy()
                     push 'quit'
                     waitFor 5000
                 }
             }
+            
+            if (! binary.optimized) { check.dependsOn gdbRescue }
         }
     }
     
