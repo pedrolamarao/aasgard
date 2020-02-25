@@ -8,11 +8,14 @@ import org.gradle.api.Action;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.model.ObjectFactory;
+import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.MapProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.TaskAction;
+
+import aasgard.gdb.GdbMiListener;
 
 
 public abstract class GdbExec extends DefaultTask
@@ -34,6 +37,9 @@ public abstract class GdbExec extends DefaultTask
 	
 	@Input
 	public Property<String> getExecutable () { return spec.getExecutable(); }
+	
+	@Input
+	public ListProperty<GdbMiListener> getListeners () { return spec.getListeners(); }
 	
 	@InputFile
 	public RegularFileProperty getTarget () { return spec.getTarget(); }

@@ -11,10 +11,14 @@ output : ( outOfBand | resultRecord )* gdb ;
 // documentation states below but gdb 9.1 behaves otherwise
 // output : outOfBand* resultRecord? gdb ;
 
-outOfBand : execAsyncRecord
+outOfBand : asyncRecord | streamOutput ;
+
+asyncRecord : execAsyncRecord
     | statusAsyncRecord
     | notifyAsyncRecord
-    | consoleStreamOutput
+    ;
+    
+streamOutput : consoleStreamOutput
     | targetStreamOutput
     | logStreamOutput
     ;

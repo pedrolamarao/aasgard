@@ -9,6 +9,8 @@ import java.util.List;
 import org.gradle.api.Action;
 import org.gradle.api.provider.Provider;
 
+import aasgard.gdb.GdbMiListener;
+
 public final class Gdb 
 {
 	public static void exec (GdbSpec spec) throws IOException
@@ -20,7 +22,7 @@ public final class Gdb
 		final var builder = new ProcessBuilder(command);
 		spec.getEnvironment().get().forEach((key, value) -> builder.environment().put(key, value));
 
-		final var gdb = new GdbMiProcess(builder.start());
+		final var gdb = new GdbMiProcess(builder.start(), spec.getListeners().map(l -> l.toArray(GdbMiListener[]::new)).get());
 		spec.getScript().get().execute(gdb);
 	}
 	

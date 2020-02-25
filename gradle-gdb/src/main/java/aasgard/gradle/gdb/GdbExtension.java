@@ -33,4 +33,16 @@ public abstract class GdbExtension
 	{
 		return getTasks().register(name, GdbExec.class, action);
 	}
+	
+	public GdbMiTestListener testListener (String symbol)
+	{
+		return new GdbMiTestListener(symbol);
+	}
+	
+	public GdbMiTestListener testListener (String symbol, Action<? super GdbMiTestListener> action)
+	{
+		var r = new GdbMiTestListener(symbol);
+		action.execute(r);
+		return r;
+	}
 }

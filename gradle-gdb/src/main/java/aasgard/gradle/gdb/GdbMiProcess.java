@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.antlr.v4.runtime.ANTLRErrorListener;
 
+import aasgard.gdb.GdbMiListener;
 import aasgard.gdb.GdbMiParser.OutputContext;
 
 public final class GdbMiProcess 
@@ -17,11 +18,30 @@ public final class GdbMiProcess
 	
 	private final Process process;
 	
+	public GdbMiProcess (Process process)
+	{
+		this.assembler = new OutputStreamWriter(process.getOutputStream());
+		this.parser = new GdbMiParserQueue(16, process.getInputStream());
+		this.process = process;
+	}
+	
+	public GdbMiProcess (Process process, GdbMiListener... listeners)
+	{
+		this.assembler = new OutputStreamWriter(process.getOutputStream());
+		this.parser = new GdbMiParserQueue(16, process.getInputStream(), listeners);
+		this.process = process;
+	}
+	
 	public GdbMiProcess (Process process, ANTLRErrorListener... errors)
 	{
 		this.assembler = new OutputStreamWriter(process.getOutputStream());
 		this.parser = new GdbMiParserQueue(16, process.getInputStream(), errors);
 		this.process = process;
+	}
+	
+	public void destroy ()
+	{
+		process.destroy();
 	}
 	
 	public OutputContext poll (int time, TimeUnit unit) throws InterruptedException
