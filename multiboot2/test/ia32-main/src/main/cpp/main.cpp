@@ -27,7 +27,10 @@ namespace
 //!
 //! @see start.S
 
-extern unsigned char _test_result;
+extern "C"
+{
+	unsigned char _test_result = 0xFF;
+}
 
 //! Multiboot2 client entry
 //!

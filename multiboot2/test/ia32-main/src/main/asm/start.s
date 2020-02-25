@@ -1,3 +1,5 @@
+// Copyright (C) 2020 Pedro Lamarão <pedro.lamarao@gmail.com>. All rights reserved.
+
 .att_syntax
 
 .text
@@ -31,9 +33,3 @@ _start:
     hlt
     jmp .Lloop
 .endfunc
-
-//! @brief Test result
-
-.global _test_result
-_test_result:
-    .byte 0xFF
