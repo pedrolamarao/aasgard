@@ -8,6 +8,7 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.channels.Channels;
@@ -104,6 +105,7 @@ public abstract class GrubRescueCompile extends DefaultTask
 		
 		var fs = build.dir("grub/fs/" + executableName + "/rescue");
 		var cfg = build.file("grub/fs/" + executableName + "/rescue/boot/grub/grub.cfg");
+		var tmp = build.dir("tmp/" + getName());
 		
 		// Create GRUB configuration
 		
@@ -115,6 +117,10 @@ public abstract class GrubRescueCompile extends DefaultTask
 		}
 		
 		// Compile GRUB rescue image
+		
+		project.mkdir(tmp);
+		var out = new FileOutputStream(tmp.get().file("out.txt").getAsFile());
+		var err = new FileOutputStream(tmp.get().file("err.txt").getAsFile());
 		
 		project.mkdir(getTarget().getAsFile().map(File::getParentFile));
 		project.exec(e -> {
@@ -128,6 +134,8 @@ public abstract class GrubRescueCompile extends DefaultTask
             e.args("--themes=" + join(" ", getThemes().get())); 
             e.args(getSource().getAsFile().get());
             e.args(fs.get().getAsFile());
+            e.setStandardOutput(out);
+            e.setErrorOutput(err);
 		});
 	}
 }
