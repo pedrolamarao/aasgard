@@ -18,6 +18,7 @@ public final class Qemu
 		ifPresent(spec.getBios(), it -> addAll(command, "-bios", it.getAsFile().toString()));
 		ifPresent(spec.getCdrom(), it -> addAll(command, "-cdrom", it.getAsFile().toString()));
 		ifPresent(spec.getGdb(), it -> addAll(command, "-gdb", it));
+		ifPresent(spec.getDisplay(), it -> addAll(command, "-display", it));
 		ifPresent(spec.getKernel(), it -> addAll(command, "-kernel", it.getAsFile().toString()));
 		ifPresent(spec.getProcessor(), it -> addAll(command, "-cpu", it));
 		if (! spec.getStart().get()) { command.add("-S"); }

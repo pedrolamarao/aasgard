@@ -44,6 +44,10 @@ public abstract class QemuSystemExec extends DefaultTask
 	public Property<String> getGdb () { return spec.getGdb(); }
 	
 	@Optional
+	@Input
+	public Property<String> getDisplay () { return spec.getDisplay(); }
+	
+	@Optional
 	@InputFile
 	public RegularFileProperty getKernel () { return spec.getKernel(); }
 	

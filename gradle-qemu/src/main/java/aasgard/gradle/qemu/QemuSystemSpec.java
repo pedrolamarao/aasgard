@@ -27,6 +27,8 @@ public abstract class QemuSystemSpec
 	
 	public abstract Property<String> getGdb ();
 	
+	public abstract Property<String> getDisplay ();
+	
 	public abstract RegularFileProperty getKernel ();
 
 	public abstract Property<String> getProcessor ();
