@@ -1,6 +1,6 @@
 plugins
 {
-    id 'base'
+    id 'cpp-application'
 }
 
 subprojects 
@@ -83,4 +83,8 @@ subprojects
     {
         implementation project(':multiboot2')
     }
+}
+
+check.configure {
+    subprojects.each { dependsOn("${it.name}:check") }
 }

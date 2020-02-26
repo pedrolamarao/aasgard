@@ -28,3 +28,5 @@ dependencies
 {
 	api project(':c++-x86')
 }
+
+check.dependsOn ':multiboot2:test:check'
