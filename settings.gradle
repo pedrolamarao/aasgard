@@ -10,10 +10,7 @@ includeBuild 'gradle-qemu'
 include 'acpi'
 include 'c++-x86'
 include 'multiboot2'
+include 'multiboot2:test:ia32-start'
+include 'multiboot2:test:ia32-main'
 include 'pc'
 include 'x86'
-
-// programs
-include 'xxx--multiboot2-x86--minimal'
-include 'xxx--multiboot2-x86--irq'
-include 'xxx--multiboot2-x86--io'

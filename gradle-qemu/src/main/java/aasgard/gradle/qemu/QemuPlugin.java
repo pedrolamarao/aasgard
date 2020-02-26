@@ -8,5 +8,6 @@ public class QemuPlugin implements Plugin<Project>
 	@Override
     public void apply (Project project) 
     {
+		project.getExtensions().create("qemu", QemuExtension.class);
     }
 }

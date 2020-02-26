@@ -2,7 +2,7 @@
 
 plugins
 {
-	id 'aasgard.asm' version '0.1.0-SNAPSHOT'
+	id 'aasgard.asm'
     id 'cpp-library'
 }
 

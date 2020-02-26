@@ -8,6 +8,7 @@ import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.nio.file.StandardOpenOption.WRITE;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.channels.Channels;
@@ -19,12 +20,29 @@ import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
+import org.gradle.api.tasks.Internal;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.language.cpp.CppExecutable;
 
 public abstract class GrubRescueCompile extends DefaultTask
 {
+	// life
+	
+	public GrubRescueCompile ()
+	{
+		final var project = getProject();
+		final var layout = project.getLayout();
+		final var build = layout.getBuildDirectory();
+		final var source = getExecutable().flatMap(binary -> binary.getLinkTask().flatMap(link -> link.getLinkedFile()));
+		getSource().set(source);
+		final var target = getExecutable().flatMap(s -> build.file("grub/bin/" + s.getName() + "/rescue/image"));
+		getTarget().set(target);
+	}
+
+	// properties
+	
+	@Internal
 	public abstract Property<CppExecutable> getExecutable ();
 	
 	@Input
@@ -48,16 +66,7 @@ public abstract class GrubRescueCompile extends DefaultTask
 	@OutputFile
 	public abstract RegularFileProperty getTarget ();
 	
-	public GrubRescueCompile ()
-	{
-		final var project = getProject();
-		final var layout = project.getLayout();
-		final var build = layout.getBuildDirectory();
-		final var source = getExecutable().flatMap(binary -> binary.getLinkTask().flatMap(link -> link.getLinkedFile()));
-		getSource().set(source);
-		final var target = getExecutable().flatMap(s -> build.file("grub/bin/" + s.getName() + "/rescue/image"));
-		getTarget().set(target);
-	}
+	// accessors
 	
 	public void install (String... value)
 	{
@@ -74,6 +83,8 @@ public abstract class GrubRescueCompile extends DefaultTask
 		getExecutable().set(value);
 	}
 	
+	// action
+	
 	private static final String template = 
 		"default=0\r\n" + 
 		"timeout=0\r\n" + 
@@ -83,7 +94,7 @@ public abstract class GrubRescueCompile extends DefaultTask
 		"}\r\n";
 	
 	@TaskAction
-	public void action ()
+	public void action () throws IOException
 	{
 		final var project = getProject();
 		final var layout = project.getLayout();
@@ -94,6 +105,7 @@ public abstract class GrubRescueCompile extends DefaultTask
 		
 		var fs = build.dir("grub/fs/" + executableName + "/rescue");
 		var cfg = build.file("grub/fs/" + executableName + "/rescue/boot/grub/grub.cfg");
+		var tmp = build.dir("tmp/" + getName());
 		
 		// Create GRUB configuration
 		
@@ -102,13 +114,13 @@ public abstract class GrubRescueCompile extends DefaultTask
 			 Writer writer = Channels.newWriter(file, US_ASCII))
 		{
 			writer.append(format(template, executableFile.get().getAsFile().getName()));
-		} 
-		catch (IOException e) 
-		{
-			throw new RuntimeException(e);
 		}
 		
 		// Compile GRUB rescue image
+		
+		project.mkdir(tmp);
+		var out = new FileOutputStream(tmp.get().file("out.txt").getAsFile());
+		var err = new FileOutputStream(tmp.get().file("err.txt").getAsFile());
 		
 		project.mkdir(getTarget().getAsFile().map(File::getParentFile));
 		project.exec(e -> {
@@ -122,6 +134,8 @@ public abstract class GrubRescueCompile extends DefaultTask
             e.args("--themes=" + join(" ", getThemes().get())); 
             e.args(getSource().getAsFile().get());
             e.args(fs.get().getAsFile());
+            e.setStandardOutput(out);
+            e.setErrorOutput(err);
 		});
 	}
 }

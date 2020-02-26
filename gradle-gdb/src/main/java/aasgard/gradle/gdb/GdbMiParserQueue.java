@@ -10,8 +10,10 @@ import java.util.concurrent.TimeUnit;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import aasgard.gdb.GdbMiLexer;
+import aasgard.gdb.GdbMiListener;
 import aasgard.gdb.GdbMiParser;
 import aasgard.gdb.GdbMiParser.OutputContext;
 
@@ -23,10 +25,24 @@ public final class GdbMiParserQueue
 	
 	private final Thread thread;
 	
+	public GdbMiParserQueue (int capacity, InputStream stream)
+	{
+		queue = new ArrayBlockingQueue<>(capacity);
+		thread = new Thread(() -> parse(stream, new GdbMiListener[0], new ANTLRErrorListener[0]));
+		thread.start();
+	}
+	
 	public GdbMiParserQueue (int capacity, InputStream stream, ANTLRErrorListener... errors)
 	{
 		queue = new ArrayBlockingQueue<>(capacity);
-		thread = new Thread(() -> parse(stream, errors));
+		thread = new Thread(() -> parse(stream, new GdbMiListener[0], errors));
+		thread.start();
+	}
+	
+	public GdbMiParserQueue (int capacity, InputStream stream, GdbMiListener... listeners)
+	{
+		queue = new ArrayBlockingQueue<>(capacity);
+		thread = new Thread(() -> parse(stream, listeners, new ANTLRErrorListener[0]));
 		thread.start();
 	}
 	
@@ -40,7 +56,7 @@ public final class GdbMiParserQueue
 		thread.join(time);
 	}
 	
-	public void parse (InputStream stream, ANTLRErrorListener... errors)
+	public void parse (InputStream stream, GdbMiListener[] listeners, ANTLRErrorListener[] errors)
 	{
 		try (var reader = new BufferedReader(new InputStreamReader(stream)))
 		{
@@ -63,10 +79,17 @@ public final class GdbMiParserQueue
 				
 				var parser = new GdbMiParser(new CommonTokenStream(lexer));
 				for (var error : errors) parser.addErrorListener(error);
+
+				var output = parser.output();
 				
-				queue.put(parser.output());
+				for (var listener : listeners) {
+					var walker = new ParseTreeWalker();
+					walker.walk(listener, output);
+				}
+				
+				queue.put(output);
 			}
-		} 
+		}
 		catch (IOException | InterruptedException e)
 		{
 			queue.offer(END);

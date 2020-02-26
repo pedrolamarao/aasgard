@@ -8,5 +8,6 @@ public class GradleGrubPlugin implements Plugin<Project>
 	@Override
     public void apply (Project project) 
     {
+		project.getExtensions().create("grub", GrubExtension.class);
     }
 }

@@ -8,5 +8,6 @@ public class GdbPlugin implements Plugin<Project>
 	@Override
     public void apply (Project project) 
     {
+		project.getExtensions().create("gdb", GdbExtension.class);
     }
 }
