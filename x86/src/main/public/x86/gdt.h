@@ -34,7 +34,6 @@ namespace x86
   //!
   //! Element of global and local descriptor tables.
 
-  [[gnu::packed]]
   class segment_descriptor
   {
   public:
@@ -150,7 +149,6 @@ namespace x86
     void __load_global_descriptor_table ( std::uint32_t base, std::uint16_t size );
 
     extern "C"
-	[[gnu::fastcall]]
     void __store_global_descriptor_table ( std::uint64_t & gdtr );
 
     extern "C"
