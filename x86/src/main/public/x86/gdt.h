@@ -34,6 +34,7 @@ namespace x86
   //!
   //! Element of global and local descriptor tables.
 
+  [[gnu::packed]]
   class segment_descriptor
   {
   public:
@@ -53,8 +54,7 @@ namespace x86
     std::uint8_t  _granularity;
     std::uint8_t  _base_upper;
 
-  }
-  __attribute__(( packed ));
+  };
 
   static_assert(sizeof(segment_descriptor) == 8, "unexpected size of segment descriptor");
 
@@ -146,13 +146,16 @@ namespace x86
   {
 
     extern "C"
-    void __load_global_descriptor_table ( std::uint32_t base, std::uint16_t size ) __attribute__(( fastcall )) ;
+	[[gnu::fastcall]]
+    void __load_global_descriptor_table ( std::uint32_t base, std::uint16_t size );
 
     extern "C"
+	[[gnu::fastcall]]
     void __store_global_descriptor_table ( std::uint64_t & gdtr );
 
     extern "C"
-    void __reload_segment_registers ( std::uint32_t code, std::uint32_t data ) __attribute__(( fastcall )) ;
+	[[gnu::fastcall]]
+    void __reload_segment_registers ( std::uint32_t code, std::uint32_t data );
 
   }
 

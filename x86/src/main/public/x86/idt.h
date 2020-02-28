@@ -75,16 +75,20 @@ namespace x86
   {
 
     extern "C"
-    void __load_interrupt_descriptor_table ( std::uint32_t base, std::uint16_t limit ) __attribute__(( fastcall )) ;
+	[[gnu::fastcall]]
+    void __load_interrupt_descriptor_table ( std::uint32_t base, std::uint16_t limit );
 
     extern "C"
+	[[gnu::fastcall]]
     void __store_interrupt_descriptor_table ( std::uint64_t & gdtr );
 
     extern "C"
-    void __enable_interrupts () __attribute__(( fastcall )) ;
+	[[gnu::fastcall]]
+    void __enable_interrupts ();
 
     extern "C"
-    void __disable_interrupts () __attribute__(( fastcall )) ;
+	[[gnu::fastcall]]
+    void __disable_interrupts ();
 
   }
 

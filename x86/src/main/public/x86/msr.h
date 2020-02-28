@@ -67,13 +67,16 @@ namespace x86
   {
 
     extern "C"
-    uint64_t __read_msr ( uint32_t id ) __attribute__(( fastcall )) ;
+	[[gnu::fastcall]]
+    uint64_t __read_msr ( uint32_t id );
 
     extern "C"
-    void __write_msr_32 ( uint32_t id, uint32_t value ) __attribute__(( fastcall )) ;
+	[[gnu::fastcall]]
+    void __write_msr_32 ( uint32_t id, uint32_t value );
 
     extern "C"
-    void __write_msr_64 ( uint32_t id, uint64_t value ) __attribute__(( fastcall ));
+	[[gnu::fastcall]]
+    void __write_msr_64 ( uint32_t id, uint64_t value );
 
   }
 

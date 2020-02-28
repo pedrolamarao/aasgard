@@ -64,10 +64,12 @@ namespace x86
   {
 
     extern "C"
-    bool __has_cpuid () __attribute__(( fastcall )) ;
+	[[gnu::fastcall]]
+    bool __has_cpuid ();
 
     extern "C"
-    void __read_cpuid (std::uint32_t leaf, std::uint32_t extra, cpuid & out) __attribute__(( fastcall )) ;
+	[[gnu::fastcall]]
+    void __read_cpuid (std::uint32_t leaf, std::uint32_t extra, cpuid & out);
 
   }
 
