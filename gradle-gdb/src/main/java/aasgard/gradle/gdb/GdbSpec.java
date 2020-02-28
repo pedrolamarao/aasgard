@@ -10,7 +10,7 @@ import org.gradle.api.provider.Property;
 import aasgard.gdb.GdbMiListener;
 
 
-public abstract class GdbSpec extends DefaultTask
+public abstract class GdbSpec
 {
 	// life
 	
