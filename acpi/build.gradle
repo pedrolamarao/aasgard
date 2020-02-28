@@ -20,7 +20,7 @@ library
     
     binaries.configureEach {
     	def compiler = compileTask.get()
-    	compiler.compilerArgs.addAll '-std=c++17', '-ffreestanding', '-nostdinc'
+    	compiler.compilerArgs.addAll '-std=c++17', '-ffreestanding', '-Wall', '-Werror'
     }
 }
 
