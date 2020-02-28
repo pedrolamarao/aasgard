@@ -34,8 +34,7 @@ namespace x86
     std::uint8_t  _type;
     std::uint16_t _offset_upper;
 
-  }
-  __attribute((aligned(8)));
+  };
 
   static_assert(sizeof(interrupt_gate_descriptor) == 8, "unexpected size of interrupt_gate_descriptor");
 
@@ -75,19 +74,18 @@ namespace x86
   {
 
     extern "C"
-	[[gnu::fastcall]]
+    [[gnu::fastcall]]
     void __load_interrupt_descriptor_table ( std::uint32_t base, std::uint16_t limit );
 
     extern "C"
-	[[gnu::fastcall]]
     void __store_interrupt_descriptor_table ( std::uint64_t & gdtr );
 
     extern "C"
-	[[gnu::fastcall]]
+    [[gnu::fastcall]]
     void __enable_interrupts ();
 
     extern "C"
-	[[gnu::fastcall]]
+    [[gnu::fastcall]]
     void __disable_interrupts ();
 
   }
