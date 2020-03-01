@@ -7,6 +7,8 @@
 #include <multiboot2/information.h>
 
 
+//! Multiboot 2 request
+
 namespace
 {
     using namespace multiboot2;
@@ -27,7 +29,7 @@ namespace
 
 extern "C"
 {
-	[[gnu::used]]
+    [[gnu::used]]
     unsigned char _test_result = 0xFF;
 }
 
@@ -35,11 +37,11 @@ extern "C"
 
 extern "C"
 [[gnu::fastcall]]
-void main ( std::uint32_t magic, multiboot2::information_list & mbi )
+void main ( std::uint32_t magic, multiboot2::information_list & response )
 {
     if (magic != 0x36D76289) {
-    	_test_result = 1;
-    	return;
+        _test_result = 1;
+        return;
     }
 
     _test_result = 0;

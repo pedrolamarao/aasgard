@@ -65,13 +65,13 @@ void main ( std::uint32_t magic, multiboot2::information_list & mbi )
     x86::internal::__store_global_descriptor_table(gdt);
 
     if (((5 * sizeof(segment_descriptor)) - 1) != (gdt & 0xFFFF)) {
-    	_test_result = 30;
-    	return;
+        _test_result = 30;
+        return;
     }
 
     if (std::uint32_t(& global_descriptor_table) != ((gdt >> 16) & 0xFFFFFFFF)) {
-    	_test_result = 40;
-    	return;
+        _test_result = 40;
+        return;
     }
 
     _test_result = 0;
