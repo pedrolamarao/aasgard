@@ -1,4 +1,4 @@
-Date: 2020-02-122
+Date: 2020-01-03
 
 # summary
 
@@ -8,9 +8,25 @@ Use it together with `cpp-application`.
 
 # use
 
-Create new tasks with type `GdbExec`.
+To create new tasks, use the `gdb` extension:
 
-Let `binary` be a `CppApplication`:
+```groovy
+binaries.whenElementFinalized { binary ->
+    def gdbTask = gdb.register('GdbTask') {
+        target = binary.executableFile
+    }
+}
+
+```
+
+# configure
+
+Properties:
+
+- `executable` — GDB executable
+- `listeners` — list of `GdbMiListener`
+- `script` — closure on `GdbMiProcess`
+- `target` — program image
 
 ## references
 
