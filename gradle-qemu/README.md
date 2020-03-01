@@ -1,4 +1,4 @@
-Date: 2020-02-15
+Date: 2020-03-01
 
 # summary
 
@@ -8,17 +8,31 @@ Use it together with `cpp-application`.
 
 # use
 
-Create new tasks with type `QemuExec`.
-
-Let `binary` be a `GrubRescueCompile`:
+To create new tasks, use the `qemu` extension:
 
 ```gradle
-tasks.register("qemuRescue_${binary.name}", aasgard.gradle.qemu.QemuExec) {
-    system 'i386'
-    cdrom binary.get().target
+binaries.whenElementFinalized { binary -> 
+    def qemuSystem = qemu.system("qemuSystem") {
+        architecture = 'i386'
+        bios = binary.get().executableFile
+    }
 }
 ```
 
+# configure
+
+## `system`
+
+Properties:
+
+- `architecture` — QEMU target architecture (e.g. `i386`) [required]
+- `bios` — BIOS program
+- `cdrom` — CD-ROM image
+- `display` — type of display (e.g. `none`)
+- `gdb` — GDB server (e.g. `tcp::1234`)
+- `kernel` — Linux compatible program
+- `start` — true to start, false to pause [default: true]
+
 ## references
 
-_TODO_
+- [QEMU](https://wiki.qemu.org/)
