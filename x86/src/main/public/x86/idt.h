@@ -180,4 +180,10 @@ namespace x86
     internal::__disable_interrupts();
   }
 
+  template <int N>
+  inline
+  void interrupt ()
+  {
+      __asm__ ("int %0\n" : : "N"(N) : "cc", "memory");
+  }
 }
