@@ -1,89 +1,71 @@
 package aasgard.gradle.grub;
 
+import java.io.IOException;
+
 import org.gradle.api.DefaultTask;
-import org.gradle.api.file.ConfigurableFileCollection;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.ListProperty;
 import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
-import org.gradle.api.tasks.InputFiles;
+import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
+import org.gradle.language.cpp.CppExecutable;
 
 public abstract class GrubStandaloneCompile extends DefaultTask
 {
-	@Input
-	public abstract Property<String> getFormat ();
-
-	@Input
-	public abstract ListProperty<String> getFonts ();
-
-	@Input
-	public abstract ListProperty<String> getInstall ();
-
-	@Input
-	public abstract ListProperty<String> getLoad ();
-	
-	@Input
-	public abstract ListProperty<String> getLocales ();
-	
-	@Input
-	public abstract Property<String> getBinaryName ();
-	
-	@InputFiles
-	public abstract ConfigurableFileCollection getSources ();
-	
-	@Input
-	public abstract ListProperty<String> getThemes ();
-	
-	@OutputFile
-	public abstract RegularFileProperty getTarget ();
-	
+	private final GrubSpec spec;
+		
 	public GrubStandaloneCompile ()
 	{
 		final var project = getProject();
-		final var layout = project.getLayout();
-		final var build = layout.getBuildDirectory();
-		final var file = getBinaryName().flatMap(binary -> getFormat().map(format -> "grub/" + binary + "/" + format + "/image"));
-		getTarget().set(build.file(file));
+		this.spec = project.getObjects().newInstance(GrubSpec.class);
+		spec.getTemporary().set(getTemporaryDir());
 	}
+
+	// properties
 	
-	public void format (String value)
-	{
-		getFormat().set(value);
-	}
+	@Input
+	public ListProperty<String> getFonts () { return spec.getFonts(); }
 	
-	public void install (String... value)
-	{
-		getInstall().addAll(value);
-	}
+	@Input
+	public Property<String> getFormat () { return spec.getFormat(); }
+
+	@Input
+	public ListProperty<String> getInstall () { return spec.getInstall(); }
+
+	@Input
+	public ListProperty<String> getLoad () { return spec.getLoad(); }
 	
-	public void binaryName (String value)
-	{
-		getBinaryName().set(value);
-	}
+	@Input
+	public ListProperty<String> getLocales () { return spec.getLocales(); }
 	
-	public void sources (Object... value)
+	@InputFile
+	public RegularFileProperty getSource () { return spec.getSource(); }
+	
+	@Input
+	public ListProperty<String> getThemes () { return spec.getThemes(); }
+	
+	@OutputFile
+	public RegularFileProperty getTarget () { return spec.getTarget(); }
+	
+	// utilities
+	
+	public void executable (CppExecutable source)
 	{
-		getSources().from(value);
-	}
+		final var file = source.getExecutableFile();
+		spec.getSource().set(file);
+		spec.getTarget().set(
+			file.flatMap(f -> getProject().getLayout().getBuildDirectory().file("grub/bin/" + f.getAsFile() + "/rescue/image"))
+		);		
+	}	
+
+	// action
 	
 	@TaskAction
-	public void action ()
+	public void action () throws InterruptedException, IOException
 	{
-		final var project = getProject();
-		project.mkdir(getTarget().get().getAsFile().getParentFile());
-		project.exec(e -> {
-			e.executable("env"); // XXX: I have no idea why my setup fails without this.
-			e.args("grub-mkstandalone");
-			e.args("-O", getFormat().get());
-            e.args("-o", getTarget().get());
-            if (! getInstall().get().isEmpty()) { e.args("--install-modules=" + String.join(" ", getInstall().get())); }
-            if (! getLoad().get().isEmpty()) { e.args("--modules=" + String.join(" ", getLoad().get())); }
-            e.args("--themes=" + String.join(" ", getThemes().get()));
-            e.args("--locales=" + String.join(" ", getLocales().get()));
-            e.args("--fonts=" + String.join(" ", getFonts().get()));
-            getSources().forEach(e::args);
-		});
+		int status = Grub.standalone(spec).waitFor();
+		if (status != 0) { throw new RuntimeException("task failed with status " + status); }
 	}
 }
