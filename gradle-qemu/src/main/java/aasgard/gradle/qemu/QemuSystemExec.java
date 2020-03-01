@@ -20,7 +20,7 @@ public abstract class QemuSystemExec extends DefaultTask
 	public QemuSystemExec ()
 	{
 		this.spec = getProject().getObjects().newInstance(QemuSystemSpec.class);
-		this.spec.getTemporaryDir().set(getProject().getLayout().getBuildDirectory().dir("tmp/" + getName()));
+		this.spec.getTemporaryDir().set(getTemporaryDir());
 	}
 	
 	// properties
@@ -63,7 +63,6 @@ public abstract class QemuSystemExec extends DefaultTask
 	@TaskAction
 	public void action () throws IOException
 	{
-		getProject().mkdir(getTemporaryDir());
 		Qemu.system(spec);
 	}
 }
