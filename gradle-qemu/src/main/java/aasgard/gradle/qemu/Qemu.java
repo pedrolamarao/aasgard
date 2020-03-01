@@ -7,10 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gradle.api.Action;
+import org.gradle.api.logging.Logger;
+import org.gradle.api.logging.Logging;
 import org.gradle.api.provider.Provider;
 
 public final class Qemu 
 {
+	private static final Logger logger = Logging.getLogger(Qemu.class);
+	
 	public static Process system (QemuSystemSpec spec) throws IOException
 	{
 		final var command = new ArrayList<String>();
@@ -23,6 +27,8 @@ public final class Qemu
 		ifPresent(spec.getProcessor(), it -> addAll(command, "-cpu", it));
 		addAll(command, "-net", "none");
 		if (! spec.getStart().get()) { command.add("-S"); }
+		
+		logger.info("QEMU command: {}", String.join(" ", command));
 		
 		final var err = spec.getTemporaryDir().file("err.txt");
 		final var out = spec.getTemporaryDir().file("out.txt");
