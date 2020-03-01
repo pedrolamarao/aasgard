@@ -23,6 +23,9 @@ if [ $? -ne 0 ]; then exit $?; fi
 wget -c -P ${SRC} https://ftp.gnu.org/gnu/grub/grub-2.04.tar.xz
 if [ $? -ne 0 ]; then exit $?; fi
 
+wget -c -P ${SRC} https://download.qemu.org/qemu-4.2.0.tar.xz
+if [ $? -ne 0 ]; then exit $?; fi
+
 # Inflate
 
 tar -C ${SRC} -xJf ${SRC}/binutils-2.34.tar.xz
@@ -35,6 +38,9 @@ tar -C ${SRC} -xJf ${SRC}/gdb-9.1.tar.xz
 if [ $? -ne 0 ]; then exit $?; fi
 
 tar -C ${SRC} -xJf ${SRC}/grub-2.04.tar.xz
+if [ $? -ne 0 ]; then exit $?; fi
+
+tar -C ${SRC} -xJf ${SRC}/qemu-4.2.0.tar.xz
 if [ $? -ne 0 ]; then exit $?; fi
 
 # Miscellaneous
