@@ -34,29 +34,30 @@ subprojects
     
             def suffix = binary.name.capitalize()
     
-            def grubRescue = grub.registerRescue("grubRescue${suffix}") {
+            def grubTask = grub.registerStandalone("grub${suffix}") {
+                format = 'i386-qemu'
                 executable binary
             }
             
-            def qemuRescue = qemu.registerSystem("qemuRescue${suffix}") {
+            def qemuTask = qemu.registerSystem("qemu${suffix}") {
                 architecture = 'i386'
-                cdrom = grubRescue.get().target
+                bios = grubTask.get().target
                 gdb = 'tcp::1234'
                 start = false
             }
             
             def gdbTest = gdb.testListener('_test_result')
             
-            def gdbRescue = gdb.register("gdbRescue${suffix}") {
-                dependsOn grubRescue
+            def gdbTask = gdb.register("gdb${suffix}") {
+                dependsOn grubTask
                 executable = 'i686-pc-elf-gdb'
                 listeners.add gdbTest
-                listeners.add gdb.logListener(file("build/tmp/gdbRescue${suffix}/mi.txt"))
+                listeners.add gdb.logListener(file("" + temporaryDir + "/mi.txt"))
                 target = binary.executableFile
                 script {
                     def qp = qemu.system {
                         architecture = 'i386'
-                        cdrom = grubRescue.get().target
+                        bios = grubTask.get().target
                         gdb = 'tcp::1234'
                         display = 'none'
                         start = false
@@ -75,7 +76,7 @@ subprojects
                 }
             }
             
-            if (! binary.optimized) { check.dependsOn gdbRescue }
+            if (! binary.optimized) { check.dependsOn gdbTask }
         }
     }
     
