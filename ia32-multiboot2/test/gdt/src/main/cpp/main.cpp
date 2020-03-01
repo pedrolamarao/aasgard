@@ -55,14 +55,13 @@ extern "C"
 [[gnu::fastcall]]
 void main ( std::uint32_t magic, multiboot2::information_list & mbi )
 {
-    x86::load_global_descriptor_table(global_descriptor_table);
+    x86::set_global_descriptor_table(global_descriptor_table);
     // #XXX: verify
 
     x86::reload_segment_registers(x86::segment_selector(1, false, 0), x86::segment_selector(2, false, 0));
     // #XXX: verify
 
-    std::uint64_t gdt { 0xFFFFFFFFFFFFFFFF };
-    x86::internal::__store_global_descriptor_table(gdt);
+    std::uint64_t gdt = x86::get_global_descriptor_table();
 
     if (((5 * sizeof(segment_descriptor)) - 1) != (gdt & 0xFFFF)) {
         _test_result = 30;
