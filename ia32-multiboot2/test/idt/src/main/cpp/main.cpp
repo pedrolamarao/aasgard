@@ -93,8 +93,10 @@ void main ( std::uint32_t magic, multiboot2::information_list & mbi )
         return;
     }
 
-    asm volatile ( "sti" );
 
-    _test_result = 0;
+    x86::enable_interrupts();
+
+    x86::interrupt<0>();
+
     return;
 }
