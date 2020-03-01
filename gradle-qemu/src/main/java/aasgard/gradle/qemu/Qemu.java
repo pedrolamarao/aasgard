@@ -21,6 +21,7 @@ public final class Qemu
 		ifPresent(spec.getDisplay(), it -> addAll(command, "-display", it));
 		ifPresent(spec.getKernel(), it -> addAll(command, "-kernel", it.getAsFile().toString()));
 		ifPresent(spec.getProcessor(), it -> addAll(command, "-cpu", it));
+		addAll(command, "-net", "none");
 		if (! spec.getStart().get()) { command.add("-S"); }
 		
 		final var err = spec.getTemporaryDir().file("err.txt");
