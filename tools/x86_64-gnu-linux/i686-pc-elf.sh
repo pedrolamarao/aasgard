@@ -16,7 +16,7 @@ MFLAGS=-j1
 
 echo Building tools host ${HOST} target ${TARGET}...
 
-rm -rf ${TMP}
+rm -rf ${TMP}/${PREFIX}
 rm -rf ${OBJ}
 mkdir -p ${OBJ}
 
