@@ -148,14 +148,22 @@ namespace x86
   }
 
   inline
-  void load_interrupt_descriptor_table ( interrupt_gate_descriptor const * table, std::uint32_t count )
+  std::uint64_t get_interrupt_descriptor_table ()
+  {
+      std::uint64_t result;
+      internal::__store_interrupt_descriptor_table(result);
+      return result;
+  }
+
+  inline
+  void set_interrupt_descriptor_table ( interrupt_gate_descriptor const * table, std::uint32_t count )
   {
     internal::__load_interrupt_descriptor_table(std::uint32_t(table), count * sizeof(interrupt_gate_descriptor));
   }
 
   template <unsigned N>
   inline
-  void load_interrupt_descriptor_table ( interrupt_gate_descriptor const (& table) [N] )
+  void set_interrupt_descriptor_table ( interrupt_gate_descriptor const (& table) [N] )
   {
     internal::__load_interrupt_descriptor_table(std::uint32_t(table), N * sizeof(interrupt_gate_descriptor));
   }

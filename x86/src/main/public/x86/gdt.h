@@ -247,14 +247,22 @@ namespace x86
   }
 
   inline
-  void load_global_descriptor_table ( segment_descriptor const * table, std::uint16_t count )
+  std::uint64_t get_global_descriptor_table ()
+  {
+      std::uint64_t result;
+      internal::__store_global_descriptor_table(result);
+      return result;
+  }
+
+  inline
+  void set_global_descriptor_table ( segment_descriptor const * table, std::uint16_t count )
   {
     internal::__load_global_descriptor_table(std::uint32_t(table), ((count * sizeof(segment_descriptor)) - 1));
   }
 
   template <unsigned N>
   inline
-  void load_global_descriptor_table ( segment_descriptor const (& table) [N] )
+  void set_global_descriptor_table ( segment_descriptor const (& table) [N] )
   {
     internal::__load_global_descriptor_table(std::uint32_t(table), ((N * sizeof(segment_descriptor)) - 1));
   }
