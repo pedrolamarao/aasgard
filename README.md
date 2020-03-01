@@ -8,7 +8,7 @@ Aasgard is a collection of components for programming the bare metal.
 
 It is designed for integration with state of the art tools.
 
-Try: `./gradlew assemble`
+Try: `./gradlew check`
 
 # index
 
@@ -22,6 +22,8 @@ Try: `./gradlew assemble`
 # build
 
 To assemble development artifacts: `./gradlew assemble`
+
+To check development artifacts: `./gradlew check`
 
 To clean all generated artifacts: `./gradlew clean`
 
