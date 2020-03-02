@@ -65,8 +65,10 @@ public abstract class QemuSystemExec extends DefaultTask
 	// task
 	
 	@TaskAction
-	public void action () throws IOException
+	public void action () throws IOException, InterruptedException
 	{
-		Qemu.system(spec);
+		var process = Qemu.system(spec);
+		var status = process.waitFor();
+		if (status != 0) throw new RuntimeException("process failed with status " + status);
 	}
 }
