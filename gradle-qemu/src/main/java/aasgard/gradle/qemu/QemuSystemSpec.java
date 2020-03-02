@@ -32,6 +32,8 @@ public abstract class QemuSystemSpec
 	public abstract RegularFileProperty getKernel ();
 
 	public abstract Property<String> getProcessor ();
+	
+	public abstract Property<String> getRtc ();
 
 	public abstract Property<Boolean> getStart ();
 	

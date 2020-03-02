@@ -21,11 +21,12 @@ public final class Qemu
 		command.add(spec.getArchitecture().map(it -> "qemu-system-" + it).get());
 		ifPresent(spec.getBios(), it -> addAll(command, "-bios", it.getAsFile().toString()));
 		ifPresent(spec.getCdrom(), it -> addAll(command, "-cdrom", it.getAsFile().toString()));
+		ifPresent(spec.getProcessor(), it -> addAll(command, "-cpu", it));
 		ifPresent(spec.getGdb(), it -> addAll(command, "-gdb", it));
 		ifPresent(spec.getDisplay(), it -> addAll(command, "-display", it));
 		ifPresent(spec.getKernel(), it -> addAll(command, "-kernel", it.getAsFile().toString()));
-		ifPresent(spec.getProcessor(), it -> addAll(command, "-cpu", it));
 		addAll(command, "-net", "none");
+		ifPresent(spec.getRtc(), it -> addAll(command, "-rtc", "base=" + it));
 		if (! spec.getStart().get()) { command.add("-S"); }
 		
 		logger.info("QEMU command: {}", String.join(" ", command));

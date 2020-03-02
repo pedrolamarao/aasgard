@@ -56,6 +56,10 @@ public abstract class QemuSystemExec extends DefaultTask
 	public Property<String> getProcessor () { return spec.getProcessor(); }
 	
 	@Input
+	@Optional
+	public Property<String> getRtc () { return spec.getRtc(); }
+	
+	@Input
 	public Property<Boolean> getStart () { return spec.getStart(); }
 	
 	// task
