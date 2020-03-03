@@ -2,7 +2,10 @@ package aasgard.gradle.gdb;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
+import org.gradle.api.logging.Logger;
+import org.gradle.api.logging.Logging;
 
 import aasgard.gdb.GdbMiBaseListener;
 import aasgard.gdb.GdbMiParser;
@@ -12,18 +15,25 @@ import aasgard.gdb.GdbMiParser.TupleContext;
 
 public final class GdbMiTestListener extends GdbMiBaseListener
 {
+	private static Logger logger = Logging.getLogger(GdbMiTestListener.class);
+	
 	private final String symbol;
 	
-	private final AtomicInteger value = new AtomicInteger(0xFF);
+	private final AtomicLong value = new AtomicLong(0xFF);
 	
 	public GdbMiTestListener (String symbol)
 	{
 		this.symbol = symbol;
 	}
 	
-	public int getValue ()
+	public long getValue ()
 	{
 		return value.get();
+	}
+	
+	public String getHexadecimal ()
+	{
+		return Long.toHexString(value.get());
 	}
 	
 	@Override 
@@ -54,13 +64,17 @@ public final class GdbMiTestListener extends GdbMiBaseListener
 		var _new = constant(value.get().result(), "new");
 		if (! _new.isPresent()) return;
 		// parse record["value"]["new"]
+		logger.lifecycle("GdbMiTestListener: new value: {}", _new.get().getText());
 		var _new_s = _new.map(x -> x.getText()).map(s -> s.substring(3, s.length() - 1)).get();
+		logger.lifecycle("GdbMiTestListener: new value, trimmed: {}", _new_s);
 		try {
-			var _new_int = Integer.parseInt(_new_s, 16);
+			var _new_int = Long.parseUnsignedLong(_new_s, 16);
 			this.value.set(_new_int);
 			synchronized (this) { this.notify(); }
 		}
-		catch (NumberFormatException e) { }
+		catch (NumberFormatException e) {
+			logger.error("failed to parse new value: {}", _new.get().getText(), e);
+		}
 	}
 	
 	public static Optional<ConstantContext> constant (List<ResultContext> list, String variable)
