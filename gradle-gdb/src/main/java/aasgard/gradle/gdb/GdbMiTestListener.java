@@ -19,7 +19,7 @@ public final class GdbMiTestListener extends GdbMiBaseListener
 	
 	private final String symbol;
 	
-	private final AtomicLong value = new AtomicLong(0xFF);
+	private final AtomicLong value = new AtomicLong(Long.MAX_VALUE);
 	
 	public GdbMiTestListener (String symbol)
 	{
