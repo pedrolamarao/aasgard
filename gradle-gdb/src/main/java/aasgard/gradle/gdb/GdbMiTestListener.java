@@ -33,7 +33,7 @@ public final class GdbMiTestListener extends GdbMiBaseListener
 	
 	public String getHexadecimal ()
 	{
-		return Long.toHexString(value.get());
+		return Long.toUnsignedString(value.get(), 16);
 	}
 	
 	@Override 
