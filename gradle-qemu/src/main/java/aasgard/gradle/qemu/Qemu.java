@@ -25,6 +25,7 @@ public final class Qemu
 		ifPresent(spec.getGdb(), it -> addAll(command, "-gdb", it));
 		ifPresent(spec.getDisplay(), it -> addAll(command, "-display", it));
 		ifPresent(spec.getKernel(), it -> addAll(command, "-kernel", it.getAsFile().toString()));
+		ifPresent(spec.getMachine(), it -> addAll(command, "-machine", it));
 		addAll(command, "-net", "none");
 		ifPresent(spec.getRtc(), it -> addAll(command, "-rtc", "base=" + it));
 		if (! spec.getStart().get()) { command.add("-S"); }

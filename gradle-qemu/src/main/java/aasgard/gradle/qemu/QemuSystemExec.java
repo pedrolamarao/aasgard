@@ -53,6 +53,10 @@ public abstract class QemuSystemExec extends DefaultTask
 	
 	@Optional
 	@Input
+	public Property<String> getMachine () { return spec.getMachine(); }
+	
+	@Optional
+	@Input
 	public Property<String> getProcessor () { return spec.getProcessor(); }
 	
 	@Input
