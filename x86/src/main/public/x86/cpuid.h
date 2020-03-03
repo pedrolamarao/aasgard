@@ -33,16 +33,16 @@ namespace x86
     cpuid (std::uint32_t id) ;
 
     constexpr
-    auto a () -> std::uint32_t ;
+    auto a () const -> std::uint32_t ;
 
     constexpr
-    auto b () -> std::uint32_t ;
+    auto b () const -> std::uint32_t ;
 
     constexpr
-    auto c () -> std::uint32_t ;
+    auto c () const -> std::uint32_t ;
 
     constexpr
-    auto d () -> std::uint32_t ;
+    auto d () const -> std::uint32_t ;
 
   private:
 
@@ -53,6 +53,29 @@ namespace x86
 
   };
 
+  class cpuid_1
+  {
+      cpuid _cpuid;
+
+  public:
+
+      //! @brief Object
+      //! @{
+
+      cpuid_1 ();
+
+      //! @}
+
+      //! @brief Properties
+      //! @{
+
+      auto has_local_apic () const -> bool;
+
+      auto has_msr () const -> bool;
+
+      //! @}
+
+  };
 }
 
 //! Inline definitions
@@ -98,27 +121,39 @@ namespace x86
   }
 
   inline constexpr
-  auto cpuid::a () -> std::uint32_t
+  auto cpuid::a () const -> std::uint32_t
   {
     return eax;
   }
 
   inline constexpr
-  auto cpuid::b () -> std::uint32_t
+  auto cpuid::b () const -> std::uint32_t
   {
     return ebx;
   }
 
   inline constexpr
-  auto cpuid::c () -> std::uint32_t
+  auto cpuid::c () const -> std::uint32_t
   {
     return ecx;
   }
 
   inline constexpr
-  auto cpuid::d () -> std::uint32_t
+  auto cpuid::d () const -> std::uint32_t
   {
     return edx;
   }
 
+  inline
+  cpuid_1::cpuid_1 () : _cpuid { 1 } { }
+
+  auto cpuid_1::has_local_apic () const -> bool
+  {
+      return (_cpuid.d() & (1 << 11)) != 0;
+  }
+
+  auto cpuid_1::has_msr () const -> bool
+  {
+      return (_cpuid.d() & (1 << 5)) != 0;
+  }
 }
