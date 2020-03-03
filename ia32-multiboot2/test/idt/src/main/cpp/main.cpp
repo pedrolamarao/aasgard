@@ -69,12 +69,15 @@ extern "C"
 [[gnu::fastcall]]
 void main ( std::uint32_t magic, multiboot2::information_list & mbi )
 {
+    if (magic != multiboot2::information_magic) {
+        _test_result = 10;
+        return;
+    }
+
     x86::set_global_descriptor_table(global_descriptor_table);
     x86::reload_segment_registers(x86::segment_selector(1, false, 0), x86::segment_selector(2, false, 0));
 
-    // #TODO reevaluate constexpr initialization
-    for (auto i = 0U, j = 256U; i != j; ++i)
-    {
+    for (auto i = 0U, j = 256U; i != j; ++i) {
         interrupt_descriptor_table[i] = { 0x8, __interrupt_service_routine, interrupt_gate_access(true, 0) };
     }
 
@@ -83,20 +86,18 @@ void main ( std::uint32_t magic, multiboot2::information_list & mbi )
 
     // #TODO document this assert
     if ((256 * sizeof(interrupt_gate_descriptor)) != (idt & 0xFFFF)) {
-        _test_result = 10;
+        _test_result = 20;
         return;
     }
 
     // #TODO document this assert
     if (std::uint32_t(& interrupt_descriptor_table) != ((idt >> 16) & 0xFFFFFFFF)) {
-        _test_result = 20;
+        _test_result = 30;
         return;
     }
 
-
-    x86::enable_interrupts();
-
     x86::interrupt<0>();
 
+    _test_result = 40;
     return;
 }
