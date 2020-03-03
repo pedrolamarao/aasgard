@@ -64,9 +64,7 @@ public final class GdbMiTestListener extends GdbMiBaseListener
 		var _new = constant(value.get().result(), "new");
 		if (! _new.isPresent()) return;
 		// parse record["value"]["new"]
-		logger.lifecycle("GdbMiTestListener: new value: {}", _new.get().getText());
 		var _new_s = _new.map(x -> x.getText()).map(s -> s.substring(3, s.length() - 1)).get();
-		logger.lifecycle("GdbMiTestListener: new value, trimmed: {}", _new_s);
 		try {
 			var _new_int = Long.parseUnsignedLong(_new_s, 16);
 			this.value.set(_new_int);
