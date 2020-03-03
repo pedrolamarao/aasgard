@@ -65,19 +65,15 @@ namespace x86
 
   namespace internal
   {
+    void read_msr ( std::uint32_t id, std::uint32_t & low, std::uint32_t & high )
+    {
+        asm volatile ("rdmsr" : "=a"(low), "=d"(high) : "c"(id));
+    }
 
-    extern "C"
-	[[gnu::fastcall]]
-    std::uint64_t __read_msr ( std::uint32_t id );
-
-    extern "C"
-	[[gnu::fastcall]]
-    void __write_msr_32 ( std::uint32_t id, std::uint32_t value );
-
-    extern "C"
-	[[gnu::fastcall]]
-    void __write_msr_64 ( std::uint32_t id, std::uint64_t value );
-
+    void write_msr ( std::uint32_t id, std::uint32_t low, std::uint32_t high )
+    {
+        asm volatile ("wrmsr" : : "a"(low), "d"(high), "c"(id));
+    }
   }
 
   inline constexpr
@@ -95,19 +91,23 @@ namespace x86
   inline
   auto read_msr (std::uint32_t id) -> std::uint64_t
   {
-    return internal::__read_msr(id);
+      std::uint32_t low, high;
+      internal::read_msr(id, low, high);
+      return (std::uint64_t{high} << 32) | low;
   }
 
   inline
   void write_msr (std::uint32_t id, std::uint32_t value)
   {
-    internal::__write_msr_32(id, value);
+      internal::write_msr(id, value, 0);
   }
 
   inline
   void write_msr (std::uint32_t id, std::uint64_t value)
   {
-    internal::__write_msr_64(id, value);
+      std::uint32_t low = value & 0xFFFFFFFF;
+      std::uint32_t high = value >> 32;
+      internal::write_msr(id, low, high);
   }
 
   inline
