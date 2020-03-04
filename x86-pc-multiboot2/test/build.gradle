@@ -43,14 +43,13 @@ subprojects
     
             def suffix = binary.name.capitalize()
     
-            def grubTask = grub.registerStandalone("grub${suffix}") {
-                format = 'i386-qemu'
+            def grubTask = grub.registerRescue("grub${suffix}") {
                 executable binary
             }
             
             def qemuTask = qemu.registerSystem("qemu${suffix}") {
                 architecture = 'i386'
-                bios = grubTask.get().target
+                cdrom = grubTask.get().target
                 gdb = 'tcp::1234'
                 rtc = '2001-02-03T04:05:06'
                 start = false
@@ -67,7 +66,7 @@ subprojects
                 script {
                     def qp = qemu.system {
                         architecture = 'i386'
-                        bios = grubTask.get().target
+                        cdrom = grubTask.get().target
                         gdb = 'tcp::1234'
                         display = 'none'
                         rtc = '2001-02-03T04:05:06'
