@@ -264,6 +264,7 @@ namespace multiboot2
     };
   }
 
+  inline
   auto begin (information_list & list) -> internal::information_item *
   {
     auto const base = reinterpret_cast<char *>(& list);
@@ -271,6 +272,7 @@ namespace multiboot2
     return reinterpret_cast<internal::information_item *>(first);
   }
 
+  inline
   auto end (information_list & list) -> internal::information_item *
   {
     auto const base = reinterpret_cast<char *>(& list);
@@ -278,6 +280,7 @@ namespace multiboot2
     return reinterpret_cast<internal::information_item *>(last);
   }
 
+  inline
   auto next (internal::information_item * item) -> internal::information_item *
   {
     auto const base = reinterpret_cast<char *>(item);
