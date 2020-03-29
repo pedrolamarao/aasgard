@@ -3,6 +3,7 @@
 plugins
 {
     id 'cpp-library'
+    id 'cpp-unit-test'
 }
 
 // project
@@ -12,10 +13,6 @@ version '0.1.0-SNAPSHOT'
 
 library
 {
-    // XXX: Gradle 6.1 refuses to cross compile
-    // XXX: convince Gradle 6.1 to configure compiler to 32 bits for now
-    targetMachines = [ machines.linux.x86 ]
-    
     linkage = [ Linkage.STATIC ]
     
     binaries.configureEach {
@@ -24,9 +21,14 @@ library
     }
 }
 
-dependencies
+unitTest
 {
-	api project(':c++-x86')
+    dependencies.implementation project(':googletest')
+
+    binaries.whenElementFinalized {
+        def compiler = compileTask.get()
+        compiler.compilerArgs.addAll '-std=c++17'
+    }
 }
 
 check.dependsOn ':multiboot2:test:check'
