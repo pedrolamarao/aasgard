@@ -14,16 +14,7 @@ plugins
 subprojects {
     model {
         toolChains {
-            // XXX: force Gradle 6.1 to use cross tools
-            gnu_i686_pc_elf(Gcc) {
-                eachPlatform {
-                    assembler.executable 'i686-pc-elf-gcc'
-                    cCompiler.executable 'i686-pc-elf-gcc'
-                    cppCompiler.executable 'i686-pc-elf-g++'
-                    linker.executable 'i686-pc-elf-gcc'
-                    staticLibArchiver.executable 'i686-pc-elf-ar'
-                }
-            }
+            tools(Clang)
         }
     }
 }
