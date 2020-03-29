@@ -20,7 +20,7 @@ library
     
     binaries.configureEach {
     	def compiler = compileTask.get()
-    	compiler.compilerArgs.addAll '-std=c++17', '-Wall', '-Werror'
+    	compiler.compilerArgs.addAll '-stdlib=libc++', '-std=c++17', '-Wall', '-Werror'
         compiler.macros.put 'GTEST_HAS_PTHREAD', '0'
     }
 }

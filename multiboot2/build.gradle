@@ -17,7 +17,7 @@ library
     
     binaries.configureEach {
     	def compiler = compileTask.get()
-    	compiler.compilerArgs.addAll '-std=c++17', '-ffreestanding', '-Wall', '-Werror'
+    	compiler.compilerArgs.addAll '-stdlib=libc++', '-std=c++17', '-ffreestanding', '-Wall', '-Werror'
     }
 }
 
@@ -27,7 +27,7 @@ unitTest
 
     binaries.whenElementFinalized {
         def compiler = compileTask.get()
-        compiler.compilerArgs.addAll '-std=c++17'
+        compiler.compilerArgs.addAll '-stdlib=libc++', '-std=c++17'
     }
 }
 
