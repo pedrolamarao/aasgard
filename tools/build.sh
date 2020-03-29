@@ -51,7 +51,7 @@ if [ ! -d ${OBJ}/llvm ]; then
     if [ $? -ne 0 ]; then exit $?; fi
     
     cmake \
-        -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DLLVM_ENABLE_PROJECTS="clang;lld" \
+        -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DLLVM_ENABLE_PROJECTS="libcxxabi;libcxx;clang;lld" \
         -B "${OBJ}/llvm" "${SRC}/llvm-project-10.0.0/llvm" \
         1>${OBJ}/llvm.log 2>&1
     if [ $? -ne 0 ]; then exit $?; fi
