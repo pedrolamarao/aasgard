@@ -1,0 +1,26 @@
+// settings
+
+plugins
+{
+    id 'cpp-library'
+}
+
+// project
+
+group 'com.github.google'
+version '1.10.0'
+
+library
+{
+    linkage = [ Linkage.STATIC ]
+    
+    source.from 'src/gtest-all.cc'
+    privateHeaders.from '.'
+    publicHeaders.from 'include'
+    
+    binaries.configureEach {
+    	def compiler = compileTask.get()
+    	compiler.compilerArgs.addAll '-std=c++17', '-Wall', '-Werror'
+        compiler.macros.put 'GTEST_HAS_PTHREAD', '0'
+    }
+}
