@@ -6,7 +6,7 @@ apt install --no-install-recommends \
  bison bzip2 \
  clang-8 cmake \
  file flex \
- libexpat1-dev libfreetype6-dev libglib2.0-dev libpixman-1-dev lld-8 \
+ libexpat1-dev libfreetype6-dev libglib2.0-dev libpixman-1-dev lld-8 llvm-8-dev \
  make \
  openjdk-11-jdk-headless \
  pkg-config python \
