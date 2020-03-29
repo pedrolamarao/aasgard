@@ -7,13 +7,13 @@ apt install --no-install-recommends \
  clang-8 cmake \
  file flex \
  libexpat1-dev libfreetype6-dev libglib2.0-dev libpixman-1-dev lld-8 llvm-8-dev \
- make \
+ make mtools \
  openjdk-11-jdk-headless \
  pkg-config python \
  texinfo \
  unifont \
  wget \
- xz-utils
+ xorriso xz-utils
 if [ $? -ne 0 ]; then exit $?; fi
 
 echo Installing Debian alternatives...
