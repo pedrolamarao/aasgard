@@ -93,6 +93,31 @@ if [ ! -d ${OBJ}/binutils-x86_64-pc-none-elf ]; then
 
 fi
 
+if [ ! -d ${OBJ}/gdb-i686-pc-none-elf ]; then
+
+    echo Building GNU GDB i686-pc-none-elf...
+    
+    mkdir -p ${OBJ}/gdb-i686-pc-none-elf \
+        1>${OBJ}/gdb-i686-pc-none-elf.log 2>&1
+    if [ $? -ne 0 ]; then exit $?; fi
+    
+    env -C ${OBJ}/gdb-i686-pc-none-elf \
+        ${SRC}/gdb-9.1/configure --prefix=${PREFIX} --target=i686-pc-elf \
+        1>${OBJ}/gdb-i686-pc-none-elf.log 2>&1
+    if [ $? -ne 0 ]; then exit $?; fi
+    
+    env -C ${OBJ}/gdb-i686-pc-none-elf \
+        make ${MFLAGS} \
+        1>${OBJ}/gdb-i686-pc-none-elf.log 2>&1
+    if [ $? -ne 0 ]; then exit $?; fi
+    
+    env -C ${OBJ}/gdb-i686-pc-none-elf \
+        make install \
+        1>${OBJ}/gdb-i686-pc-none-elf.log 2>&1
+    if [ $? -ne 0 ]; then exit $?; fi
+
+fi
+
 if [ ! -d ${OBJ}/gdb-x86_64-pc-none-elf ]; then
 
     echo Building GNU GDB x86_64-pc-none-elf...
@@ -195,8 +220,6 @@ fi
 
 if [ ! -d ${OBJ}/grub-x86_64-efi ]; then
 
-    echo Building GNU GRUB x86_64-efi...
-    
     mkdir -p ${OBJ}/grub-x86_64-efi \
         1>${OBJ}/grub-x86_64-efi.log 2>&1
     if [ $? -ne 0 ]; then exit $?; fi
@@ -205,23 +228,11 @@ if [ ! -d ${OBJ}/grub-x86_64-efi ]; then
         ${SRC}/grub-2.04/configure --prefix=${PREFIX} --target=x86_64 --with-platform=efi \
         1>${OBJ}/grub-x86_64-efi.log 2>&1
     if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/grub-x86_64-efi \
-        make ${MFLAGS} \
-        1>${OBJ}/grub-x86_64-efi.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/grub-x86_64-efi \
-        make install \
-        1>${OBJ}/grub-x86_64-efi.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
 
 fi
 
 if [ ! -d ${OBJ}/qemu ]; then
 
-    echo Building QEMU...
-    
     mkdir -p ${OBJ}/qemu \
         1>${OBJ}/qemu.log 2>&1
     if [ $? -ne 0 ]; then exit $?; fi
