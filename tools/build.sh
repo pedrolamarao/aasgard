@@ -238,7 +238,7 @@ if [ ! -d ${OBJ}/qemu ]; then
     if [ $? -ne 0 ]; then exit $?; fi
     
     env -C ${OBJ}/qemu \
-        ${SRC}/qemu-4.2.0/configure --prefix=${PREFIX} --disable-user --enable-plugins \
+        ${SRC}/qemu-4.2.0/configure --prefix=${PREFIX} --target-list=i386-softmmu,x86_64-softmmu --enable-plugins \
         1>${OBJ}/qemu.log 2>&1
     if [ $? -ne 0 ]; then exit $?; fi
     
