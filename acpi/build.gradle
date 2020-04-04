@@ -3,6 +3,7 @@
 plugins
 {
     id 'cpp-library'
+    id 'cpp-unit-test'
 }
 
 // project
@@ -14,8 +15,20 @@ library
 {
     linkage = [ Linkage.STATIC ]
     
+    dependencies.api project(':psys')
+    
     binaries.configureEach {
     	def compiler = compileTask.get()
     	compiler.compilerArgs.addAll '-std=c++17', '-ffreestanding', '-Wall', '-Werror'
+    }
+}
+
+unitTest
+{
+    dependencies.implementation project(':googletest')
+
+    binaries.whenElementFinalized {
+        def compiler = compileTask.get()
+        compiler.compilerArgs.addAll '-stdlib=libc++', '-std=c++17'
     }
 }
