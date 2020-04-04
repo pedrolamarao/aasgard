@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <psys/integer.h>
 
 
 //! Declarations
@@ -16,20 +16,20 @@ namespace acpi
   {
     // since revision 0
     char     signature [8];
-    std::uint8_t  checksum;
+    ps::size1  checksum;
     char     oem_id [6];
-    std::uint8_t  revision;
-    std::uint32_t address;
+    ps::size1  revision;
+    ps::size4 address;
 
     // since revision 1
-    std::uint32_t length;
-    std::uint64_t extended_address;
-    std::uint8_t  extended_checksum;
-    std::uint8_t  reserved [3];
+    ps::size4 length;
+    ps::size8 extended_address;
+    ps::size1  extended_checksum;
+    ps::size1  reserved [3];
   };
 
   constexpr
-  auto revision ( root_system_description_pointer const & x ) -> std::uint8_t ;
+  auto revision ( root_system_description_pointer const & x ) -> ps::size1 ;
 
   auto is_valid ( root_system_description_pointer const & x ) -> bool ;
 
@@ -48,17 +48,17 @@ namespace acpi
   struct system_description
   {
     char     signature [4];
-    std::uint32_t length;
-    std::uint8_t  revision;
-    std::uint8_t  checksum;
+    ps::size4 length;
+    ps::size1  revision;
+    ps::size1  checksum;
     char     oem_id [6];
     char     oem_table_id [8];
-    std::uint32_t oem_revision;
-    std::uint32_t creator_id;
-    std::uint32_t creator_revision;
+    ps::size4 oem_revision;
+    ps::size4 creator_id;
+    ps::size4 creator_revision;
   };
 
-  auto revision ( system_description const & x ) -> std::uint8_t ;
+  auto revision ( system_description const & x ) -> ps::size1 ;
 
   auto is_valid ( system_description const & x ) -> bool ;
 
@@ -68,14 +68,14 @@ namespace acpi
   {
     system_description header;
 
-    std::uint32_t pointers [];
+    ps::size4 pointers [];
   };
 
   auto is_valid ( narrow_root_system_description const & x ) -> bool ;
 
-  auto begin ( narrow_root_system_description const & x ) -> std::uint32_t const * ;
+  auto begin ( narrow_root_system_description const & x ) -> ps::size4 const * ;
 
-  auto end ( narrow_root_system_description const & x ) -> std::uint32_t const * ;
+  auto end ( narrow_root_system_description const & x ) -> ps::size4 const * ;
 
   //! Root System Description with wide pointers
 
@@ -83,24 +83,24 @@ namespace acpi
   {
     system_description header;
 
-    std::uint64_t pointers [];
+    ps::size8 pointers [];
   };
 
   auto is_valid ( wide_root_system_description const & x ) -> bool ;
 
-  auto begin ( wide_root_system_description const & x ) -> std::uint64_t const * ;
+  auto begin ( wide_root_system_description const & x ) -> ps::size8 const * ;
 
-  auto end ( wide_root_system_description const & x ) -> std::uint64_t const * ;
+  auto end ( wide_root_system_description const & x ) -> ps::size8 const * ;
 
   //! Generic memory address
 
   struct generic_address
   {
-    std::uint8_t  space;
-    std::uint8_t  width;
-    std::uint8_t  offset;
-    std::uint8_t  access;
-    std::uint64_t address;
+    ps::size1  space;
+    ps::size1  width;
+    ps::size1  offset;
+    ps::size1  access;
+    ps::size8 address;
   };
 
   //! Fixed System Description
@@ -109,52 +109,52 @@ namespace acpi
   {
       system_description base;
 
-      std::uint32_t FirmwareCtrl;
-      std::uint32_t Dsdt;
-      std::uint8_t  Reserved;
-      std::uint8_t  PreferredPowerManagementProfile;
-      std::uint16_t SCI_Interrupt;
-      std::uint32_t SMI_CommandPort;
-      std::uint8_t  AcpiEnable;
-      std::uint8_t  AcpiDisable;
-      std::uint8_t  S4BIOS_REQ;
-      std::uint8_t  PSTATE_Control;
-      std::uint32_t PM1aEventBlock;
-      std::uint32_t PM1bEventBlock;
-      std::uint32_t PM1aControlBlock;
-      std::uint32_t PM1bControlBlock;
-      std::uint32_t PM2ControlBlock;
-      std::uint32_t PMTimerBlock;
-      std::uint32_t GPE0Block;
-      std::uint32_t GPE1Block;
-      std::uint8_t  PM1EventLength;
-      std::uint8_t  PM1ControlLength;
-      std::uint8_t  PM2ControlLength;
-      std::uint8_t  PMTimerLength;
-      std::uint8_t  GPE0Length;
-      std::uint8_t  GPE1Length;
-      std::uint8_t  GPE1Base;
-      std::uint8_t  CStateControl;
-      std::uint16_t WorstC2Latency;
-      std::uint16_t WorstC3Latency;
-      std::uint16_t FlushSize;
-      std::uint16_t FlushStride;
-      std::uint8_t  DutyOffset;
-      std::uint8_t  DutyWidth;
-      std::uint8_t  DayAlarm;
-      std::uint8_t  MonthAlarm;
-      std::uint8_t  Century;
+      ps::size4 FirmwareCtrl;
+      ps::size4 Dsdt;
+      ps::size1  Reserved;
+      ps::size1  PreferredPowerManagementProfile;
+      ps::size2 SCI_Interrupt;
+      ps::size4 SMI_CommandPort;
+      ps::size1  AcpiEnable;
+      ps::size1  AcpiDisable;
+      ps::size1  S4BIOS_REQ;
+      ps::size1  PSTATE_Control;
+      ps::size4 PM1aEventBlock;
+      ps::size4 PM1bEventBlock;
+      ps::size4 PM1aControlBlock;
+      ps::size4 PM1bControlBlock;
+      ps::size4 PM2ControlBlock;
+      ps::size4 PMTimerBlock;
+      ps::size4 GPE0Block;
+      ps::size4 GPE1Block;
+      ps::size1  PM1EventLength;
+      ps::size1  PM1ControlLength;
+      ps::size1  PM2ControlLength;
+      ps::size1  PMTimerLength;
+      ps::size1  GPE0Length;
+      ps::size1  GPE1Length;
+      ps::size1  GPE1Base;
+      ps::size1  CStateControl;
+      ps::size2 WorstC2Latency;
+      ps::size2 WorstC3Latency;
+      ps::size2 FlushSize;
+      ps::size2 FlushStride;
+      ps::size1  DutyOffset;
+      ps::size1  DutyWidth;
+      ps::size1  DayAlarm;
+      ps::size1  MonthAlarm;
+      ps::size1  Century;
 
       // since ACPI 2.0
 
-      std::uint16_t        BootArchitectureFlags;
-      std::uint8_t         Reserved2;
-      std::uint32_t        Flags;
+      ps::size2        BootArchitectureFlags;
+      ps::size1         Reserved2;
+      ps::size4        Flags;
       generic_address ResetReg;
-      std::uint8_t         ResetValue;
-      std::uint8_t         Reserved3[3];
-      std::uint64_t        X_FirmwareControl;
-      std::uint64_t        X_Dsdt;
+      ps::size1         ResetValue;
+      ps::size1         Reserved3[3];
+      ps::size8        X_FirmwareControl;
+      ps::size8        X_Dsdt;
       generic_address X_PM1aEventBlock;
       generic_address X_PM1bEventBlock;
       generic_address X_PM1aControlBlock;
@@ -171,11 +171,11 @@ namespace acpi
   {
     system_description base;
 
-    std::uint32_t local_apic_address;
-    std::uint32_t flags;
+    ps::size4 local_apic_address;
+    ps::size4 flags;
   };
 
-  enum class apic_structure_type : std::uint8_t
+  enum class apic_structure_type : ps::size1
   {
     local_apic             = 0,
     io_apic                = 1,
@@ -186,54 +186,54 @@ namespace acpi
 
   struct apic_description
   {
-    std::uint8_t type;
-    std::uint8_t length;
+    ps::size1 type;
+    ps::size1 length;
   };
 
   struct local_apic_description
   {
     apic_description base;
 
-    std::uint8_t  processor;
-    std::uint8_t  id;
-    std::uint32_t flags;
+    ps::size1  processor;
+    ps::size1  id;
+    ps::size4 flags;
   };
 
   struct io_apic_description
   {
     apic_description base;
 
-    std::uint8_t  id;
-    std::uint8_t  reserved0;
-    std::uint32_t address;
-    std::uint32_t system_vector_base;
+    ps::size1  id;
+    ps::size1  reserved0;
+    ps::size4 address;
+    ps::size4 system_vector_base;
   };
 
   struct input_source_override_description
   {
     apic_description base;
 
-    std::uint8_t  bus;
-    std::uint8_t  source;
-    std::uint32_t global_system_interrupt_vector;
-    std::uint16_t flags;
+    ps::size1  bus;
+    ps::size1  source;
+    ps::size4 global_system_interrupt_vector;
+    ps::size2 flags;
   };
 
   struct nmi_source_description
   {
     apic_description base;
 
-    std::uint16_t flags;
-    std::uint32_t global_system_interrupt_vector;
+    ps::size2 flags;
+    ps::size4 global_system_interrupt_vector;
   };
 
   struct local_apic_nmi_description
   {
     apic_description base;
 
-    std::uint8_t  processor;
-    std::uint16_t flags;
-    std::uint8_t  pin;
+    ps::size1  processor;
+    ps::size2 flags;
+    ps::size1  pin;
   };
 
 }
@@ -244,7 +244,7 @@ namespace acpi
 namespace acpi
 {
   inline constexpr
-  auto revision ( root_system_description_pointer const & x ) -> std::uint8_t
+  auto revision ( root_system_description_pointer const & x ) -> ps::size1
   {
     return x.revision;
   }
@@ -252,9 +252,9 @@ namespace acpi
   inline
   auto is_valid_r0 ( root_system_description_pointer const & x ) -> bool
   {
-    std::uint8_t sum = 0;
-    std::uint8_t const * i = (std::uint8_t const *)(& x);
-    std::uint8_t const * e = i + 20;
+    ps::size1 sum = 0;
+    ps::size1 const * i = (ps::size1 const *)(& x);
+    ps::size1 const * e = i + 20;
     for (; i != e; ++i) sum += (* i);
     return (sum == 0);
   }
@@ -262,9 +262,9 @@ namespace acpi
   inline
   auto is_valid_r1 ( root_system_description_pointer const & x ) -> bool
   {
-    std::uint8_t sum = 0;
-    std::uint8_t const * i = (std::uint8_t const *)(& x);
-    std::uint8_t const * e = i + 36;
+    ps::size1 sum = 0;
+    ps::size1 const * i = (ps::size1 const *)(& x);
+    ps::size1 const * e = i + 36;
     for (; i != e; ++i) sum += (* i);
     return (sum == 0);
   }
@@ -294,9 +294,9 @@ namespace acpi
   inline
   auto is_valid ( system_description const & x ) -> bool
   {
-    std::uint8_t sum = 0;
-    std::uint8_t const * i = (std::uint8_t const *)(& x);
-    std::uint8_t const * e = i + x.length;
+    ps::size1 sum = 0;
+    ps::size1 const * i = (ps::size1 const *)(& x);
+    ps::size1 const * e = i + x.length;
     for (; i != e; ++i) sum += (* i);
     return (sum == 0);
   }
@@ -314,28 +314,28 @@ namespace acpi
   }
 
   inline
-  auto begin ( narrow_root_system_description const & x ) -> std::uint32_t const *
+  auto begin ( narrow_root_system_description const & x ) -> ps::size4 const *
   {
     return x.pointers;
   }
 
   inline
-  auto end ( narrow_root_system_description const & x ) -> std::uint32_t const *
+  auto end ( narrow_root_system_description const & x ) -> ps::size4 const *
   {
-    auto const count = (x.header.length - sizeof(acpi::system_description)) / sizeof(std::uint32_t);
+    auto const count = (x.header.length - sizeof(acpi::system_description)) / sizeof(ps::size4);
     return x.pointers + count;
   }
 
   inline
-  auto begin ( wide_root_system_description const & x ) -> std::uint64_t const *
+  auto begin ( wide_root_system_description const & x ) -> ps::size8 const *
   {
     return x.pointers;
   }
 
   inline
-  auto end ( wide_root_system_description const & x ) -> std::uint64_t const *
+  auto end ( wide_root_system_description const & x ) -> ps::size8 const *
   {
-    auto const count = (x.header.length - sizeof(acpi::system_description)) / sizeof(std::uint64_t);
+    auto const count = (x.header.length - sizeof(acpi::system_description)) / sizeof(ps::size8);
     return x.pointers + count;
   }
 
