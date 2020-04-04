@@ -1,0 +1,34 @@
+// settings
+
+plugins
+{
+    id 'cpp-library'
+    id 'cpp-unit-test'
+}
+
+// project
+
+group 'aasgard'
+version '0.1.0-SNAPSHOT'
+
+library
+{
+    targetMachines = [ machines.linux.x86, machines.linux.x86_64 ]
+
+    linkage = [ Linkage.STATIC ]
+    
+    binaries.whenElementFinalized {
+    	def compiler = compileTask.get()
+    	compiler.compilerArgs.addAll '-stdlib=libc++', '-std=c++20', '-ffreestanding', '-Wall'
+    }
+}
+
+unitTest
+{
+    dependencies.implementation project(':googletest')
+
+    binaries.whenElementFinalized {
+        def compiler = compileTask.get()
+        compiler.compilerArgs.addAll '-stdlib=libc++', '-std=c++20'
+    }
+}
