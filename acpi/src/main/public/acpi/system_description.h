@@ -35,12 +35,10 @@ namespace acpi
 
   struct narrow_root_system_description ;
 
-  constexpr
   auto narrow_address ( root_system_description_pointer const & x) -> narrow_root_system_description const * ;
 
   struct wide_root_system_description ;
 
-  constexpr
   auto wide_address ( root_system_description_pointer const & x ) -> wide_root_system_description const * ;
 
   //! System Description
@@ -277,14 +275,12 @@ namespace acpi
   }
 
   inline
-  constexpr
   auto narrow_address ( root_system_description_pointer const & x) -> narrow_root_system_description const *
   {
-    return (narrow_root_system_description const *)(x.address);
+    return (narrow_root_system_description const *)((char*){0} + x.address);
   }
 
   inline
-  constexpr
   auto wide_address ( root_system_description_pointer const & x) -> wide_root_system_description const *
   {
     return (wide_root_system_description const *)(x.extended_address);
