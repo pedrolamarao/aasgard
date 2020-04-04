@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <psys/integer.h>
 
 
 //! Declarations
@@ -19,11 +19,11 @@ namespace multiboot2
 
   //! @brief Multiboot2 header magic number
 
-  constexpr std::uint32_t header_magic = 0xe85250d6;
+  constexpr ps::size4 header_magic = 0xe85250d6;
 
   //! @brief Multiboot2 request architecture
 
-  enum class architecture_type : std::uint32_t
+  enum class architecture_type : ps::size4
   {
     x86    = 0,
     mips32 = 4,
@@ -32,7 +32,7 @@ namespace multiboot2
 
   //! @brief Multiboot2 header tag type
 
-  enum class tag_type : std::uint16_t
+  enum class tag_type : ps::size2
   {
     end         = 0,
     information = 1,
@@ -50,97 +50,97 @@ namespace multiboot2
 
   struct alignas(header_alignment) header_prologue
   {
-    std::uint32_t      magic;
+    ps::size4          magic;
     architecture_type  architecture;
-    std::uint32_t      size;
-    std::uint32_t      checksum;
+    ps::size4          size;
+    ps::size4          checksum;
 
     constexpr
-    header_prologue (architecture_type architecture, std::uint32_t size);
+    header_prologue (architecture_type architecture, ps::size4 size);
   };
 
   //! @brief Multiboot2 tag list end
 
   struct alignas(tag_alignment) end_request
   {
-    tag_type      type  = tag_type::end;
-    std::uint16_t flags = 0;
-    std::uint32_t size  = 8;
+    tag_type  type  = tag_type::end;
+    ps::size2 flags = 0;
+    ps::size4 size  = 8;
   };
 
   //! @brief Multiboot2 request for loading a.out
 
   struct alignas(tag_alignment) address_request
   {
-    tag_type      type;
-    std::uint16_t flags;
-    std::uint32_t size;
+    tag_type  type;
+    ps::size2 flags;
+    ps::size4 size;
 
-    std::uint32_t header_addr;
-    std::uint32_t load_addr;
-    std::uint32_t load_end_addr;
-    std::uint32_t bss_end_addr;
+    ps::size4 header_addr;
+    ps::size4 load_addr;
+    ps::size4 load_end_addr;
+    ps::size4 bss_end_addr;
   };
 
   //! @brief Multiboot2 request for loading ELF
 
   struct alignas(tag_alignment) entry_address_request
   {
-    tag_type      type;
-    std::uint16_t flags;
-    std::uint32_t size;
+    tag_type  type;
+    ps::size2 flags;
+    ps::size4 size;
 
-    std::uint32_t entry_addr;
+    ps::size4 entry_addr;
   };
 
   //! @brief Multiboot2 request for console support
 
   struct alignas(tag_alignment) console_request
   {
-    tag_type      type;
-    std::uint16_t flags;
-    std::uint32_t size;
+    tag_type  type;
+    ps::size2 flags;
+    ps::size4 size;
 
-    std::uint32_t console_flags;
+    ps::size4 console_flags;
 
     constexpr
-    console_request (std::uint16_t flags, std::uint32_t console_flags);
+    console_request (ps::size2 flags, ps::size4 console_flags);
 
     constexpr explicit
-    console_request (std::uint32_t console_flags);
+    console_request (ps::size4 console_flags);
   };
 
   //! @brief Multiboot2 request for framebuffer support
 
   struct alignas(tag_alignment) framebuffer_request
   {
-    tag_type      type;
-    std::uint16_t flags;
-    std::uint32_t size;
+    tag_type  type;
+    ps::size2 flags;
+    ps::size4 size;
 
-    std::uint32_t width;
-    std::uint32_t height;
-    std::uint32_t depth;
-
-    constexpr
-    framebuffer_request (std::uint16_t flags, std::uint32_t width, std::uint32_t height, std::uint32_t depth);
+    ps::size4 width;
+    ps::size4 height;
+    ps::size4 depth;
 
     constexpr
-    framebuffer_request (std::uint32_t width, std::uint32_t height, std::uint32_t depth);
+    framebuffer_request (ps::size2 flags, ps::size4 width, ps::size4 height, ps::size4 depth);
+
+    constexpr
+    framebuffer_request (ps::size4 width, ps::size4 height, ps::size4 depth);
   };
 
   //! @brief Multiboot2 request for module alignment
 
   struct alignas(tag_alignment) module_alignment_request
   {
-    tag_type      type;
-    std::uint16_t flags;
-    std::uint32_t size;
+    tag_type  type;
+    ps::size2 flags;
+    ps::size4 size;
 
-    std::uint32_t unused [3];
+    ps::size4 unused [3];
 
     constexpr explicit
-    module_alignment_request (std::uint16_t f);
+    module_alignment_request (ps::size2 f);
 
     constexpr
     module_alignment_request ();
@@ -154,33 +154,33 @@ namespace multiboot2
 {
 
   constexpr
-  header_prologue::header_prologue (architecture_type a, std::uint32_t s) :
+  header_prologue::header_prologue (architecture_type a, ps::size4 s) :
     magic(header_magic), architecture(a), size(s),
-    checksum(- (header_magic + (std::uint32_t)(architecture_type::x86) + s))
+    checksum(- (header_magic + (ps::size4)(architecture_type::x86) + s))
   { }
 
   constexpr
-  console_request::console_request (std::uint16_t f, std::uint32_t cf) :
+  console_request::console_request (ps::size2 f, ps::size4 cf) :
     type(tag_type::console), flags(f), size(sizeof(console_request)), console_flags(cf)
   { }
 
   constexpr
-  console_request::console_request (std::uint32_t cf) :
+  console_request::console_request (ps::size4 cf) :
     type(tag_type::console), flags(1), size(sizeof(console_request)), console_flags(cf)
   { }
 
   constexpr
-  framebuffer_request::framebuffer_request (std::uint16_t f, std::uint32_t w, std::uint32_t h, std::uint32_t d) :
+  framebuffer_request::framebuffer_request (ps::size2 f, ps::size4 w, ps::size4 h, ps::size4 d) :
     type(tag_type::framebuffer), flags(f), size(sizeof(framebuffer_request)), width(w), height(h), depth(d)
   { }
 
   constexpr
-  framebuffer_request::framebuffer_request (std::uint32_t w, std::uint32_t h, std::uint32_t d) :
+  framebuffer_request::framebuffer_request (ps::size4 w, ps::size4 h, ps::size4 d) :
     type(tag_type::framebuffer), flags(1), size(sizeof(framebuffer_request)), width(w), height(h), depth(d)
   { }
 
   constexpr inline
-  module_alignment_request::module_alignment_request (std::uint16_t f) :
+  module_alignment_request::module_alignment_request (ps::size2 f) :
     type(tag_type::module), flags(f), size(sizeof(module_alignment_request)), unused{0,0,0}
   { }
 
