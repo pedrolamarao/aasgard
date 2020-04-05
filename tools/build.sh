@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# Settings
+# General settings
 
 PREFIX=${HOME}/tools
 SRC=${PREFIX}/src
 OBJ=${PREFIX}/obj
+
+# Build settings
 
 export AR=llvm-ar-8
 export CC=clang
@@ -38,13 +40,13 @@ export TARGET_RANLIB=$RANLIB
 
 export MFLAGS=-j6
 
-echo Building tools...
+echo Building...
 
 mkdir -p ${OBJ}
 
-if [ ! -d ${OBJ}/llvm ]; then
+echo Building LLVM...
 
-    echo Building LLVM...
+if [ ! -d ${OBJ}/llvm ]; then
 
     mkdir -p ${OBJ}/llvm \
         1>${OBJ}/llvm.log 2>&1
@@ -55,22 +57,22 @@ if [ ! -d ${OBJ}/llvm ]; then
         -B "${OBJ}/llvm" "${SRC}/llvm-project-10.0.0/llvm" \
         1>${OBJ}/llvm.log 2>&1
     if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/llvm \
-        make ${MFLAGS} \
-        1>${OBJ}/llvm.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/llvm \
-        make install \
-        1>${OBJ}/llvm.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
 
 fi
 
-if [ ! -d ${OBJ}/binutils-x86_64-pc-none-elf ]; then
+env -C ${OBJ}/llvm \
+    make ${MFLAGS} \
+    1>${OBJ}/llvm.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
 
-    echo Building GNU Binutils x86_64-pc-none-elf...
+env -C ${OBJ}/llvm \
+    make install \
+    1>${OBJ}/llvm.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
+
+echo Building GNU Binutils x86_64-pc-elf...
+
+if [ ! -d ${OBJ}/binutils-x86_64-pc-none-elf ]; then
     
     mkdir -p ${OBJ}/binutils-x86_64-pc-none-elf \
         1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1
@@ -80,22 +82,22 @@ if [ ! -d ${OBJ}/binutils-x86_64-pc-none-elf ]; then
         ${SRC}/binutils-2.34/configure --prefix=${PREFIX} --target=x86_64-pc-elf \
         1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1
     if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/binutils-x86_64-pc-none-elf \
-        make ${MFLAGS} \
-        1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/binutils-x86_64-pc-none-elf \
-        make install \
-        1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
 
 fi
 
-if [ ! -d ${OBJ}/gdb-i686-pc-none-elf ]; then
+env -C ${OBJ}/binutils-x86_64-pc-none-elf \
+    make ${MFLAGS} \
+    1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
 
-    echo Building GNU GDB i686-pc-none-elf...
+env -C ${OBJ}/binutils-x86_64-pc-none-elf \
+    make install \
+    1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
+
+echo Building GNU GDB i686-pc-none-elf...
+
+if [ ! -d ${OBJ}/gdb-i686-pc-none-elf ]; then
     
     mkdir -p ${OBJ}/gdb-i686-pc-none-elf \
         1>${OBJ}/gdb-i686-pc-none-elf.log 2>&1
@@ -105,22 +107,22 @@ if [ ! -d ${OBJ}/gdb-i686-pc-none-elf ]; then
         ${SRC}/gdb-9.1/configure --prefix=${PREFIX} --target=i686-pc-elf \
         1>${OBJ}/gdb-i686-pc-none-elf.log 2>&1
     if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/gdb-i686-pc-none-elf \
-        make ${MFLAGS} \
-        1>${OBJ}/gdb-i686-pc-none-elf.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/gdb-i686-pc-none-elf \
-        make install \
-        1>${OBJ}/gdb-i686-pc-none-elf.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
 
 fi
 
-if [ ! -d ${OBJ}/gdb-x86_64-pc-none-elf ]; then
+env -C ${OBJ}/gdb-i686-pc-none-elf \
+    make ${MFLAGS} \
+    1>${OBJ}/gdb-i686-pc-none-elf.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
 
-    echo Building GNU GDB x86_64-pc-none-elf...
+env -C ${OBJ}/gdb-i686-pc-none-elf \
+    make install \
+    1>${OBJ}/gdb-i686-pc-none-elf.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
+
+echo Building GNU GDB x86_64-pc-none-elf...
+
+if [ ! -d ${OBJ}/gdb-x86_64-pc-none-elf ]; then
     
     mkdir -p ${OBJ}/gdb-x86_64-pc-none-elf \
         1>${OBJ}/gdb-x86_64-pc-none-elf.log 2>&1
@@ -130,22 +132,22 @@ if [ ! -d ${OBJ}/gdb-x86_64-pc-none-elf ]; then
         ${SRC}/gdb-9.1/configure --prefix=${PREFIX} --target=x86_64-pc-elf \
         1>${OBJ}/gdb-x86_64-pc-none-elf.log 2>&1
     if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/gdb-x86_64-pc-none-elf \
-        make ${MFLAGS} \
-        1>${OBJ}/gdb-x86_64-pc-none-elf.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/gdb-x86_64-pc-none-elf \
-        make install \
-        1>${OBJ}/gdb-x86_64-pc-none-elf.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
 
 fi
 
-if [ ! -d ${OBJ}/grub-i386-pc ]; then
+env -C ${OBJ}/gdb-x86_64-pc-none-elf \
+    make ${MFLAGS} \
+    1>${OBJ}/gdb-x86_64-pc-none-elf.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
 
-    echo Building GNU GRUB i386-pc...
+env -C ${OBJ}/gdb-x86_64-pc-none-elf \
+    make install \
+    1>${OBJ}/gdb-x86_64-pc-none-elf.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
+
+echo Building GNU GRUB i386-pc...
+
+if [ ! -d ${OBJ}/grub-i386-pc ]; then
     
     mkdir -p ${OBJ}/grub-i386-pc \
         1>${OBJ}/grub-i386-pc.log 2>&1
@@ -155,22 +157,22 @@ if [ ! -d ${OBJ}/grub-i386-pc ]; then
         ${SRC}/grub-2.04/configure --prefix=${PREFIX} --target=i386 --with-platform=pc \
         1>${OBJ}/grub-i386-pc.log 2>&1
     if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/grub-i386-pc \
-        make ${MFLAGS} \
-        1>${OBJ}/grub-i386-pc.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/grub-i386-pc \
-        make install \
-        1>${OBJ}/grub-i386-pc.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
 
 fi
 
-if [ ! -d ${OBJ}/grub-i386-efi ]; then
+env -C ${OBJ}/grub-i386-pc \
+    make ${MFLAGS} \
+    1>${OBJ}/grub-i386-pc.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
 
-    echo Building GNU GRUB i386-efi...
+env -C ${OBJ}/grub-i386-pc \
+    make install \
+    1>${OBJ}/grub-i386-pc.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
+
+echo Building GNU GRUB i386-efi...
+
+if [ ! -d ${OBJ}/grub-i386-efi ]; then
     
     mkdir -p ${OBJ}/grub-i386-efi \
         1>${OBJ}/grub-i386-efi.log 2>&1
@@ -180,22 +182,22 @@ if [ ! -d ${OBJ}/grub-i386-efi ]; then
         ${SRC}/grub-2.04/configure --prefix=${PREFIX} --target=i386 --with-platform=efi \
         1>${OBJ}/grub-i386-efi.log 2>&1
     if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/grub-i386-efi \
-        make ${MFLAGS} \
-        1>${OBJ}/grub-i386-efi.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/grub-i386-efi \
-        make install \
-        1>${OBJ}/grub-i386-efi.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
 
 fi
 
-if [ ! -d ${OBJ}/grub-i386-qemu ]; then
+env -C ${OBJ}/grub-i386-efi \
+    make ${MFLAGS} \
+    1>${OBJ}/grub-i386-efi.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
 
-    echo Building GNU GRUB i386-qemu...
+env -C ${OBJ}/grub-i386-efi \
+    make install \
+    1>${OBJ}/grub-i386-efi.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
+
+echo Building GNU GRUB i386-qemu...
+
+if [ ! -d ${OBJ}/grub-i386-qemu ]; then
     
     mkdir -p ${OBJ}/grub-i386-qemu \
         1>${OBJ}/grub-i386-qemu.log 2>&1
@@ -205,18 +207,20 @@ if [ ! -d ${OBJ}/grub-i386-qemu ]; then
         ${SRC}/grub-2.04/configure --prefix=${PREFIX} --target=i386 --with-platform=qemu \
         1>${OBJ}/grub-i386-qemu.log 2>&1
     if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/grub-i386-qemu \
-        make ${MFLAGS} \
-        1>${OBJ}/grub-i386-qemu.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/grub-i386-qemu \
-        make install \
-        1>${OBJ}/grub-i386-qemu.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
 
 fi
+
+env -C ${OBJ}/grub-i386-qemu \
+    make ${MFLAGS} \
+    1>${OBJ}/grub-i386-qemu.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
+
+env -C ${OBJ}/grub-i386-qemu \
+    make install \
+    1>${OBJ}/grub-i386-qemu.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
+
+echo Building GNU GRUB x86_64-efi...
 
 if [ ! -d ${OBJ}/grub-x86_64-efi ]; then
 
@@ -231,6 +235,18 @@ if [ ! -d ${OBJ}/grub-x86_64-efi ]; then
 
 fi
 
+env -C ${OBJ}/grub-x86_64-efi \
+    make ${MFLAGS} \
+    1>${OBJ}/grub-x86_64-efi.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
+
+env -C ${OBJ}/grub-x86_64-efi \
+    make install \
+    1>${OBJ}/grub-x86_64-efi.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
+
+echo Building QEMU i386, x86_64...
+
 if [ ! -d ${OBJ}/qemu ]; then
 
     mkdir -p ${OBJ}/qemu \
@@ -241,17 +257,17 @@ if [ ! -d ${OBJ}/qemu ]; then
         ${SRC}/qemu-4.2.0/configure --prefix=${PREFIX} --target-list=i386-softmmu,x86_64-softmmu --enable-plugins \
         1>${OBJ}/qemu.log 2>&1
     if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/qemu \
-        make ${MFLAGS} \
-        1>${OBJ}/qemu.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
-    
-    env -C ${OBJ}/qemu \
-        make install \
-        1>${OBJ}/qemu.log 2>&1
-    if [ $? -ne 0 ]; then exit $?; fi
 
 fi
+
+env -C ${OBJ}/qemu \
+    make ${MFLAGS} \
+    1>${OBJ}/qemu.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
+
+env -C ${OBJ}/qemu \
+    make install \
+    1>${OBJ}/qemu.log 2>&1
+if [ $? -ne 0 ]; then exit $?; fi
 
 echo Finish!
