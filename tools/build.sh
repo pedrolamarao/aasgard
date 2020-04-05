@@ -14,7 +14,7 @@ export CFLAGS=-O2
 export CXX=clang++
 export CXXFLAGS=-O2
 export LD=lld
-export LDFLAGS=-flto
+export LDFLAGS=
 export NM=llvm-nm-8
 export RANLIB=llvm-ranlib-8
 
