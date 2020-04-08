@@ -22,7 +22,6 @@
 
 .global _start
 .type   _start, STT_FUNC
-.func   _start, _start
 _start:
     movl $(stack + STACK_SIZE), %esp
     push $0
@@ -33,4 +32,3 @@ _start:
 .Lloop:
     hlt
     jmp .Lloop
-.endfunc
