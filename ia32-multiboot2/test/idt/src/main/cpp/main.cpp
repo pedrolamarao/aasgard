@@ -14,12 +14,14 @@ namespace
 {
     using namespace multiboot2;
 
-    struct
+    struct request_type
     {
         header_prologue prologue;
         end_request     end;
-    }
-    constexpr request [[gnu::used, gnu::section(".multiboot2")]] =
+    };
+
+    [[gnu::used, gnu::section(".multiboot2")]]
+    constexpr request_type request =
     {
         { architecture_type::x86, sizeof(request), },
         { },
@@ -32,7 +34,8 @@ namespace
 {
     using namespace x86;
 
-    constexpr segment_descriptor global_descriptor_table [5] [[gnu::aligned(8), gnu::section(".gdt")]] =
+    [[gnu::aligned(8), gnu::section(".gdt")]]
+    constexpr segment_descriptor global_descriptor_table [5] =
     {
         { },
         { 0, 0xFFFFFFFF, code_segment_access(true, false, 0), segment_granularity(false, true, true) },
