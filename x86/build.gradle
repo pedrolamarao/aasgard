@@ -27,6 +27,9 @@ library
 
 unitTest
 {
+    // #TODO: add support for x86(64)
+    targetMachines = [ machines.linux.x86 ]
+    
     dependencies.implementation project(':googletest')
 
     binaries.whenElementFinalized {
