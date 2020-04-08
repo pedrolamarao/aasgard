@@ -13,6 +13,7 @@ include 'googletest'
 include 'ia32-multiboot2'
 include 'multiboot2'
 include 'pc'
+include 'psys'
 include 'x86'
 
 // tests
