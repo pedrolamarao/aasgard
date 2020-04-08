@@ -6,8 +6,6 @@
 
 .global __has_cpuid
 .type   __has_cpuid, STT_FUNC
-.func   __has_cpuid
-
 __has_cpuid:
 	pushf
 	pop %ebx
@@ -21,14 +19,10 @@ __has_cpuid:
     sete %al
 	ret
 
-.endfunc
-
 // x86::internal::__read_cpuid [ fastcall ] : ( uint32_t id, uint32_t extra, cpuid & result ) -> ()
 
 .global __read_cpuid
 .type   __read_cpuid, STT_FUNC
-.func   __read_cpuid
-
 __read_cpuid:
 	mov %ecx, %eax
 	mov %edx, %ecx
@@ -39,5 +33,3 @@ __read_cpuid:
 	mov %ecx, 8(%edi)
 	mov %edx, 12(%edi)
 	ret
-
-.endfunc

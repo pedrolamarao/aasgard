@@ -12,35 +12,25 @@
 
 .global __load_global_descriptor_table
 .type   __load_global_descriptor_table, STT_FUNC
-.func   __load_global_descriptor_table
-
 __load_global_descriptor_table:
 	mov %ecx, .Lgdtr + 2
 	mov %dx, .Lgdtr
 	lgdt .Lgdtr
 	ret
 
-.endfunc
-
 // x86::internal::__store_global_descriptor_table [ fastcall ] : ( base : ptr<dword> , limit : ptr<word> ) -> ()
 
 .global __store_global_descriptor_table
 .type   __store_global_descriptor_table, STT_FUNC
-.func   __store_global_descriptor_table
-
 __store_global_descriptor_table:
 	movl 4(%esp), %eax
 	sgdt (%eax)
 	ret
 
-.endfunc
-
 // x86::internal::__reload_segment_registers [ fastcall ] : ( code : word , data : word ) -> ()
 
 .global __reload_segment_registers
 .type   __reload_segment_registers, STT_FUNC
-.func   __reload_segment_registers
-
 __reload_segment_registers:
 	push %ecx
 	mov $reload, %eax
@@ -53,5 +43,3 @@ reload:
 	mov %dx, %gs
 	mov %dx, %ss
 	ret
-
-.endfunc

@@ -6,38 +6,26 @@
 
 .global __read_msr
 .type   __read_msr, STT_FUNC
-.func   __read_msr
-
 __read_msr:
 	rdmsr
 	ret
-
-.endfunc
 
 // x86::internal::__write_msr_32 [ fastcall ] : ( id : uint32_t, value : uint32_t )
 
 .global __write_msr_32
 .type   __write_msr_32, STT_FUNC
-.func   __write_msr_32
-
 __write_msr_32:
 	mov %edx, %eax
 	xor %edx, %edx
 	wrmsr
 	ret
 
-.endfunc
-
 // x86::internal::__write_msr_64 [ fastcall ] : ( id : uint32_t, value : uint64_t )
 
 .global __write_msr_64
 .type   __write_msr_64, STT_FUNC
-.func   __write_msr_64
-
 __write_msr_64:
 	mov 4(%esp), %eax
 	mov 8(%esp), %edx
 	wrmsr
 	ret
-
-.endfunc
