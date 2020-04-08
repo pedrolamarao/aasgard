@@ -12,6 +12,9 @@ version '1.10.0'
 
 library
 {
+    // #XXX: clang can't cross compile to system "any"
+    targetMachines = [ machines.linux.x86, machines.linux.x86_64 ]
+
     linkage = [ Linkage.STATIC ]
     
     source.from 'src/gtest-all.cc'
