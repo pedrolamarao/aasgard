@@ -147,11 +147,13 @@ namespace x86
   inline
   cpuid_1::cpuid_1 () : _cpuid { 1 } { }
 
+  inline
   auto cpuid_1::has_local_apic () const -> bool
   {
       return (_cpuid.d() & (1 << 11)) != 0;
   }
 
+  inline
   auto cpuid_1::has_msr () const -> bool
   {
       return (_cpuid.d() & (1 << 5)) != 0;
