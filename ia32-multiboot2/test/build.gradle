@@ -27,7 +27,7 @@ subprojects
         binaries.whenElementFinalized { binary ->
         
             def compiler = compileTask.get()
-            compiler.compilerArgs.addAll '-std=c++17', '-ffreestanding', '-Wall', '-Werror'
+            compiler.compilerArgs.addAll '-std=c++17', '-ffreestanding', '-Werror', '-Wall', '-Wno-unused-private-field'
             
             def linker = linkTask.get()
             linker.linkerArgs.addAll '-nostdlib', '-Ttext', '0x1000'
