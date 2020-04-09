@@ -23,7 +23,6 @@ namespace x86
     constexpr
     interrupt_gate_descriptor ( std::uint16_t segment, std::uint32_t address, std::uint8_t access );
 
-    constexpr
     interrupt_gate_descriptor ( std::uint16_t segment, void (* address) (), std::uint8_t access );
 
     auto offset_lower () const { return _offset_lower; }
@@ -120,7 +119,7 @@ namespace x86
 
   }
 
-  inline constexpr
+  inline
   interrupt_gate_descriptor::interrupt_gate_descriptor ( std::uint16_t segment, void (* address) (), std::uint8_t access ) :
     _offset_lower((std::uint32_t)(address) & 0xFFFF),
     _segment(segment),
