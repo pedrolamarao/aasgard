@@ -39,7 +39,7 @@ subprojects
             compiler.compilerArgs.addAll '-std=c++17', '-ffreestanding', '-Werror', '-Wall', '-Wno-unused-private-field'
             
             def linker = linkTask.get()
-            linker.linkerArgs.addAll '-nostdlib', '-Ttext', '0x1000'
+            linker.linkerArgs.addAll '-nostdlib', '-W,-Ttext=0x1000'
     
             def suffix = binary.name.capitalize()
     
