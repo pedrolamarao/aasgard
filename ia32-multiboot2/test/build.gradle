@@ -41,7 +41,7 @@ subprojects
             def qemuTask = qemu.registerSystem("qemu${suffix}") {
                 architecture = 'i386'
                 cdrom = grubTask.get().target
-                gdb = 'tcp::1234'
+                gdb = 'tcp:localhost:12345'
                 start = false
             }
             
@@ -57,12 +57,12 @@ subprojects
                     def qp = qemu.system {
                         architecture = 'i386'
                         cdrom = grubTask.get().target
-                        gdb = 'tcp::1234'
+                        gdb = 'tcp:localhost:12345'
                         display = 'none'
                         start = false
                     }
                     push 'set output-radix 16'
-                    push 'target remote localhost:1234'
+                    push 'target remote localhost:12345'
                     push 'thbreak _start'
                     push 'continue'
                     push 'watch _test_result'
