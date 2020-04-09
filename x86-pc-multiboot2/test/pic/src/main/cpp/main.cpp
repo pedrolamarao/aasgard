@@ -19,13 +19,14 @@
 
 namespace
 {
-    struct
+    struct request_type
     {
         multiboot2::header_prologue prologue;
         multiboot2::end_request     end;
-    }
-    constexpr
-    request [[gnu::used, gnu::section(".multiboot2")]] =
+    };
+
+    [[gnu::used, gnu::section(".multiboot2")]]
+    constexpr request_type request =
     {
         { multiboot2::architecture_type::x86, sizeof(request), },
         { },
@@ -36,8 +37,8 @@ namespace
 
 namespace
 {
-    constexpr
-    x86::segment_descriptor global_descriptor_table [5] [[gnu::aligned(8)]] =
+    [[gnu::aligned(8)]]
+    constexpr x86::segment_descriptor global_descriptor_table [5] =
     {
         { },
         { 0, 0xFFFFFFFF, x86::code_segment_access(true, false, 0), x86::segment_granularity(false, true, true) },
@@ -51,7 +52,8 @@ namespace
 
 namespace
 {
-    x86::interrupt_gate_descriptor interrupt_descriptor_table [256] [[gnu::aligned(8)]] =
+    [[gnu::aligned(8)]]
+    x86::interrupt_gate_descriptor interrupt_descriptor_table [256] =
     { };
 
     extern "C"

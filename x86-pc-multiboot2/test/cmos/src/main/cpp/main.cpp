@@ -15,13 +15,14 @@
 
 namespace
 {
-    struct
+    struct request_type
     {
         multiboot2::header_prologue prologue;
         multiboot2::end_request     end;
-    }
-    constexpr
-    request [[gnu::used, gnu::section(".multiboot2")]] =
+    };
+
+    [[gnu::used, gnu::section(".multiboot2")]]
+    constexpr request =
     {
         { multiboot2::architecture_type::x86, sizeof(request), },
         { },
