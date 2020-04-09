@@ -8,7 +8,6 @@ includeBuild 'gradle-qemu'
 
 // components
 include 'acpi'
-include 'c++-x86'
 include 'googletest'
 include 'ia32-multiboot2'
 include 'multiboot2'
