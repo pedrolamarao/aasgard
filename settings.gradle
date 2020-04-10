@@ -1,10 +1,18 @@
+pluginManagement
+{
+    repositories
+    {
+        mavenLocal()
+        gradlePluginPortal()
+    }
+}
+
 rootProject.name = 'aasgard'
 
 // plugins
 includeBuild 'gradle-asm'
 includeBuild 'gradle-gdb'
 includeBuild 'gradle-grub'
-includeBuild 'gradle-qemu'
 
 // components
 include 'acpi'

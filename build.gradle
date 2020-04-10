@@ -5,7 +5,7 @@ plugins
     id 'aasgard.asm' version '0.1.0-SNAPSHOT' apply false
     id 'aasgard.gdb' version '0.1.0-SNAPSHOT' apply false
     id 'aasgard.grub' version '0.1.0-SNAPSHOT' apply false
-    id 'aasgard.qemu' version '0.1.0-SNAPSHOT' apply false
+    id 'pl.gradle-qemu' version '0.2.0-SNAPSHOT' apply false
     id 'base'
 }
 

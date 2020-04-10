@@ -19,7 +19,7 @@ subprojects
     apply plugin: 'aasgard.asm'
     apply plugin: 'aasgard.gdb'
     apply plugin: 'aasgard.grub'
-    apply plugin: 'aasgard.qemu'
+    apply plugin: 'pl.gradle-qemu'
     apply plugin: 'cpp-application'
 
     // project
