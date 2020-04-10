@@ -54,7 +54,7 @@ subprojects
                 listeners.add gdb.logListener(file("build/tmp/gdbRescue${suffix}/mi.txt"))
                 target = binary.executableFile
                 script {
-                    def qp = qemu.system {
+                    def qp = qemu.runSystem {
                         architecture = 'i386'
                         cdrom = grubRescue.get().target
                         gdb = 'tcp:localhost:12345'
