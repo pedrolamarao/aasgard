@@ -229,7 +229,7 @@ if [ ! -d ${OBJ}/qemu ]; then
         exit $? 
     
     env -C ${OBJ}/qemu \
-        ${SRC}/qemu-5.0.0-rc2/configure --prefix=${PREFIX} --target-list=i386-softmmu,x86_64-softmmu --enable-plugins \
+        ${SRC}/qemu-4.2.0/configure --prefix=${PREFIX} --target-list=i386-softmmu,x86_64-softmmu --enable-plugins \
         1>${OBJ}/qemu.log 2>&1 ||
         exit $? 
 
