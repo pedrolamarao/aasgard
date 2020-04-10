@@ -28,9 +28,9 @@ if [ ! -d ${SRC}/grub-2.04 ]; then
     if [ $? -ne 0 ]; then exit $?; fi
 fi
 
-if [ ! -d ${SRC}/qemu-4.2.0 ]; then
-    wget -c -P ${SRC} https://download.qemu.org/qemu-4.2.0.tar.xz
+if [ ! -d ${SRC}/qemu-5.0.0-rc2 ]; then
+    wget -c -P ${SRC} https://download.qemu.org/qemu-5.0.0-rc2.tar.xz
     if [ $? -ne 0 ]; then exit $?; fi
-    tar -C ${SRC} -xJf ${SRC}/qemu-4.2.0.tar.xz
+    tar -C ${SRC} -xJf ${SRC}/qemu-5.0.0-rc2.tar.xz
     if [ $? -ne 0 ]; then exit $?; fi
 fi
