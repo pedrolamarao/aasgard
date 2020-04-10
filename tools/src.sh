@@ -14,13 +14,6 @@ if [ ! -d ${SRC}/llvm-project-10.0.0 ]; then
     if [ $? -ne 0 ]; then exit $?; fi
 fi
 
-if [ ! -d ${SRC}/binutils-2.34 ]; then
-    wget -c -P ${SRC} https://ftp.gnu.org/gnu/binutils/binutils-2.34.tar.xz
-    if [ $? -ne 0 ]; then exit $?; fi
-    tar -C ${SRC} -xJf ${SRC}/binutils-2.34.tar.xz
-    if [ $? -ne 0 ]; then exit $?; fi
-fi
-
 if [ ! -d ${SRC}/gdb-9.1 ]; then
     wget -c -P ${SRC} https://ftp.gnu.org/gnu/gdb/gdb-9.1.tar.xz
     if [ $? -ne 0 ]; then exit $?; fi

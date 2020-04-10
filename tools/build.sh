@@ -70,31 +70,6 @@ env -C ${OBJ}/llvm \
     1>${OBJ}/llvm.log 2>&1 ||
 	exit $?
 
-echo Building GNU Binutils x86_64-pc-elf...
-
-if [ ! -d ${OBJ}/binutils-x86_64-pc-none-elf ]; then
-    
-    mkdir -p ${OBJ}/binutils-x86_64-pc-none-elf \
-        1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1 ||
-        exit $? 
-    
-    env -C ${OBJ}/binutils-x86_64-pc-none-elf \
-        ${SRC}/binutils-2.34/configure --prefix=${PREFIX} --target=x86_64-pc-elf \
-        1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1 ||
-        exit $? 
-
-fi
-
-env -C ${OBJ}/binutils-x86_64-pc-none-elf \
-    make ${MFLAGS} \
-    1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1 ||
-    exit $? 
-
-env -C ${OBJ}/binutils-x86_64-pc-none-elf \
-    make install \
-    1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1 ||
-    exit $? 
-
 echo Building GNU GDB i686-pc-none-elf...
 
 if [ ! -d ${OBJ}/gdb-i686-pc-none-elf ]; then
