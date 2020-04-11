@@ -220,7 +220,7 @@ env -C ${OBJ}/grub-x86_64-efi \
     1>${OBJ}/grub-x86_64-efi.log 2>&1 ||
     exit $? 
 
-echo Building QEMU i386, x86_64...
+echo Building QEMU...
 
 if [ ! -d ${OBJ}/qemu ]; then
 
@@ -229,7 +229,7 @@ if [ ! -d ${OBJ}/qemu ]; then
         exit $? 
     
     env -C ${OBJ}/qemu \
-        ${SRC}/qemu-4.2.0/configure --prefix=${PREFIX} --target-list=i386-softmmu,x86_64-softmmu --enable-plugins \
+        ${SRC}/qemu-4.2.0/configure --prefix=${PREFIX} --enable-plugins \
         1>${OBJ}/qemu.log 2>&1 ||
         exit $? 
 
