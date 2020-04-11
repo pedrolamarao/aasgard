@@ -1,0 +1,87 @@
+plugins
+{
+    id 'cpp'
+}
+
+subprojects 
+{
+    // settings
+
+    apply plugin: 'aasgard.asm'
+    apply plugin: 'aasgard.gdb'
+    apply plugin: 'aasgard.grub'
+    apply plugin: 'cpp-application'
+    apply plugin: 'pl.gradle-qemu'
+    
+    // project
+    
+    application
+    {
+        // #XXX: Gradle can't cross compile to system "none"
+        targetMachines = [ machines.linux.x86 ]
+        
+        dependencies
+        {
+            implementation project(':multiboot2')
+            implementation project(':x86')
+        }
+    
+        binaries.whenElementFinalized { binary ->
+        
+            def compiler = compileTask.get()
+            compiler.compilerArgs.addAll '-std=c++17', '-ffreestanding', '-nostdinc',
+                '-Werror', '-Wall', '-Wno-unused-private-field'
+            
+            def linker = linkTask.get()
+            linker.linkerArgs.addAll '-fuse-ld=lld',
+                '-std=c++17', '-ffreestanding', '-nostdlib', 
+                '-Wl,-Ttext=0x1000'
+    
+            def suffix = binary.name.capitalize()
+    
+            def grubRescue = grub.registerRescue("grubRescue${suffix}") {
+                executable binary
+            }
+            
+            def qemuRescue = qemu.registerSystem("qemuRescue${suffix}") {
+                architecture = 'i386'
+                cdrom = grubRescue.get().target
+                gdb = 'tcp::12345'
+                start = false
+            }
+            
+            def gdbTest = gdb.testListener('_test_result')
+            
+            def gdbRescue = gdb.register("gdbRescue${suffix}") {
+                dependsOn grubRescue
+                executable = 'i686-pc-elf-gdb'
+                listeners.add gdbTest
+                listeners.add gdb.logListener(file("build/tmp/gdbRescue${suffix}/mi.txt"))
+                target = binary.executableFile
+                script {
+                    def qp = qemu.runSystem {
+                        architecture = 'i386'
+                        cdrom = grubRescue.get().target
+                        gdb = 'tcp:localhost:12345'
+                        display = 'none'
+                        start = false
+                    }
+                    push 'set output-radix 16'
+                    push 'target remote localhost:12345'
+                    push 'thbreak _start'
+                    push 'continue'
+                    push 'watch _test_result'
+                    push 'continue'
+                    synchronized (gdbTest) { gdbTest.wait(5000); }
+                    logger.lifecycle '_test_result = ' + gdbTest.value
+                    qp.destroy()
+                    push 'quit'
+                    waitFor 5000
+                }
+            }
+            
+            // #XXX: add "debug" variant to qemuSystemTest
+            if (! binary.optimized) { qemuSystemTest.dependsOn gdbRescue }
+        }
+    }
+}

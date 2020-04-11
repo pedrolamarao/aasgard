@@ -11,12 +11,19 @@ plugins
 
 // project
 
-subprojects {
-    model {
-        toolChains {
+subprojects 
+{
+    model 
+    {
+        toolChains 
+        {
             tools(Clang)
         }
     }
+    
+    tasks.register('qemuUserTest')
+
+    tasks.register('qemuSystemTest')
 }
 
 // tasks
