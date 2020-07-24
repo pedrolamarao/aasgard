@@ -1,7 +1,7 @@
 // Copyright (C) 2020 Pedro Lamarão <pedro.lamarao@gmail.com>. All rights reserved.
 
 
-#include <cstdint>
+#include <psys/integer.h>
 
 #include <multiboot2/header.h>
 #include <multiboot2/information.h>
@@ -35,14 +35,14 @@ namespace
 extern "C"
 {
     [[gnu::used]]
-    std::uint64_t _test_result = 0xFF;
+    unsigned char _test_result = 0xFF;
 }
 
 //! Multiboot2 entry point
 
 extern "C"
 [[gnu::fastcall]]
-void main ( std::uint32_t magic, multiboot2::information_list & mbi )
+void main ( ps::size4 magic, multiboot2::information_list & mbi )
 {
     // multiboot2
 
@@ -72,7 +72,7 @@ void main ( std::uint32_t magic, multiboot2::information_list & mbi )
         return;
     }
 
-    std::uint64_t value = x86::read_msr(0x1B);
+    auto value = x86::read_msr(0x1B);
     if ((value & 0xFFFFFFFFFFFF0000) != 0x00000000FEE00000) {
         _test_result = 50;
         return;

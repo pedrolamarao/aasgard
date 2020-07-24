@@ -1,7 +1,7 @@
 // Copyright (C) 2020 Pedro Lamarão <pedro.lamarao@gmail.com>. All rights reserved.
 
 
-#include <cstdint>
+#include <psys/integer.h>
 
 #include <multiboot2/header.h>
 #include <multiboot2/information.h>
@@ -65,14 +65,14 @@ namespace
 extern "C"
 {
     [[gnu::used]]
-    std::uint32_t _test_result = 0xFFFFFFFF;
+    ps::size4 _test_result = 0xFFFFFFFF;
 }
 
 //! Multiboot2 entry point
 
 extern "C"
 [[gnu::fastcall]]
-void main ( std::uint32_t magic, multiboot2::information_list & mbi )
+void main ( ps::size4 magic, multiboot2::information_list & mbi )
 {
     asm volatile ("cli");
 

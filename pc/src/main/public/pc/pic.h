@@ -2,26 +2,26 @@
 
 #pragma once
 
-#include <cstdint>
+#include <psys/integer.h>
 
 
 namespace pc
 {
-    enum class pic_buffering : std::uint8_t
+    enum class pic_buffering : ps::size1
     {
         none   = 0,
         slave  = 0x08,
         master = 0x0C,
     };
 
-    enum class pic_read : std::uint8_t
+    enum class pic_read : ps::size1
     {
         ignore = 0,
         ir     = 2,
         is     = 3,
     };
 
-    enum class pic_mask : std::uint8_t
+    enum class pic_mask : ps::size1
     {
         ignore = 0,
         unset  = 0x20,
@@ -35,8 +35,8 @@ namespace pc
     {
     public:
 
-        Port<std::uint8_t> _command;
-        Port<std::uint8_t> _data;
+        Port<ps::size1> _command;
+        Port<ps::size1> _data;
 
     public:
 
@@ -44,7 +44,7 @@ namespace pc
         //! @{
 
         constexpr
-        pic (std::uint16_t base) : _command { base }, _data { std::uint8_t( base + 1 ) } {}
+        pic (ps::size2 base) : _command { base }, _data { ps::size1( base + 1 ) } {}
 
         static constexpr
         auto master () { return pic{0x20}; }
@@ -61,29 +61,29 @@ namespace pc
 
         void icw1 (bool icw4, bool single, bool level)
         {
-            std::uint8_t value = (icw4 ? 1 : 0) | (single ? 2 : 0) | (level ? 8 : 0) | 16;
+            ps::size1 value = (icw4 ? 1 : 0) | (single ? 2 : 0) | (level ? 8 : 0) | 16;
             _command.write(value);
         }
 
         //! @brief Initialization command word 2 (ICW2) — interrupt offset
 
-        void icw2 (std::uint8_t offset)
+        void icw2 (ps::size1 offset)
         {
             _data.write(offset);
         }
 
         //! @brief Initialization command word 3 (ICW3) — slave lines
 
-        void icw3_master (std::uint8_t slaves)
+        void icw3_master (ps::size1 slaves)
         {
             _data.write(slaves);
         }
 
         //! @brief Initialization command word 3 (ICW3) — slave id
 
-        void icw3_slave (std::uint8_t id)
+        void icw3_slave (ps::size1 id)
         {
-            std::uint8_t value = (id & 7);
+            ps::size1 value = (id & 7);
             _data.write(value);
         }
 
@@ -91,7 +91,7 @@ namespace pc
 
         void icw4 (bool x86, bool aeoi, pic_buffering buffering, bool sfnm)
         {
-            std::uint8_t value = (x86 ? 1 : 0) | (aeoi ? 2 : 0) | (std::uint8_t(buffering) & 0x0C) | (sfnm ? 16 : 0);
+            ps::size1 value = (x86 ? 1 : 0) | (aeoi ? 2 : 0) | (ps::size1(buffering) & 0x0C) | (sfnm ? 16 : 0);
             _data.write(value);
         }
 
@@ -102,16 +102,16 @@ namespace pc
 
         //! @brief Operational command word 1 (OCW1) — interrupt masking
 
-        void ocw1 (std::uint8_t mask)
+        void ocw1 (ps::size1 mask)
         {
             _data.write(mask);
         }
 
         //! @brief Operational command word 2 (OCW2) — end of interrupt
 
-        void ocw2 (std::uint8_t level, bool eoi, bool specific, bool rotate)
+        void ocw2 (ps::size1 level, bool eoi, bool specific, bool rotate)
         {
-            std::uint8_t value = (level & 0x07) | (eoi ? 8 : 0) | (specific ? 16 : 0) | (rotate ? 32 : 0);
+            ps::size1 value = (level & 0x07) | (eoi ? 8 : 0) | (specific ? 16 : 0) | (rotate ? 32 : 0);
             _command.write(value);
         }
 
@@ -119,7 +119,7 @@ namespace pc
 
         void ocw3 (pic_read read, bool poll, pic_mask mask)
         {
-            std::uint8_t value = (std::uint8_t(read) & 0x03) | (poll ? 4 : 0) | 8 | (std::uint8_t(mask) & 0x30);
+            ps::size1 value = (ps::size1(read) & 0x03) | (poll ? 4 : 0) | 8 | (ps::size1(mask) & 0x30);
             _command.write(value);
         }
 
@@ -128,19 +128,19 @@ namespace pc
         //! @brief Properties
         //! @{
 
-        std::uint8_t in_service ()
+        ps::size1 in_service ()
         {
             ocw3(pic_read::is, true, pic_mask::ignore);
             // #XXX: wait? how?
             return _command.read();
         }
 
-        std::uint8_t mask ()
+        ps::size1 mask ()
         {
             return _data.read();
         }
 
-        void mask (std::uint8_t value)
+        void mask (ps::size1 value)
         {
             _data.write(value);
         }

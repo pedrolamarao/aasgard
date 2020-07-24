@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <psys/integer.h>
 
 //! @brief Declarations
 
@@ -15,13 +15,13 @@ namespace x86
   {
   public:
 
-    std::uint16_t const address;
+    ps::size2 const address;
 
     //! @brief Constructor for port at address
     //!
     //! @param address  port address
 
-    constexpr explicit port (std::uint16_t address);
+    constexpr explicit port (ps::size2 address);
 
     //! @brief Read from port
 
@@ -36,27 +36,24 @@ namespace x86
 }
 
 
-#include <cstdint>
-
-
 //! @brief Inline definitions
 
 namespace x86
 {
   namespace internal
   {
-    inline void __port_read (std::uint16_t port, std::uint8_t & value) { asm volatile ("inb %1, %0" : "=a"(value) : "Nd"(port) ); }
-    inline void __port_read (std::uint16_t port, std::uint16_t & value) { asm volatile ("inw %1, %0" : "=a"(value) : "Nd"(port) ); }
-    inline void __port_read (std::uint16_t port, std::uint32_t & value) { asm volatile ("inl %1, %0" : "=a"(value) : "Nd"(port) ); }
-    inline void __port_write (std::uint16_t port, std::uint8_t value) { asm volatile ("outb %0, %1" : : "a"(value), "Nd"(port) ); }
-    inline void __port_write (std::uint16_t port, std::uint16_t value) { asm volatile ("outw %0, %1" : : "a"(value), "Nd"(port) ); }
-    inline void __port_write (std::uint16_t port, std::uint32_t value) { asm volatile ("outl %0, %1" : : "a"(value), "Nd"(port) ); }
+    inline void __port_read (ps::size2 port, ps::size1 & value) { asm volatile ("inb %1, %0" : "=a"(value) : "Nd"(port) ); }
+    inline void __port_read (ps::size2 port, ps::size2 & value) { asm volatile ("inw %1, %0" : "=a"(value) : "Nd"(port) ); }
+    inline void __port_read (ps::size2 port, ps::size4 & value) { asm volatile ("inl %1, %0" : "=a"(value) : "Nd"(port) ); }
+    inline void __port_write (ps::size2 port, ps::size1 value) { asm volatile ("outb %0, %1" : : "a"(value), "Nd"(port) ); }
+    inline void __port_write (ps::size2 port, ps::size2 value) { asm volatile ("outw %0, %1" : : "a"(value), "Nd"(port) ); }
+    inline void __port_write (ps::size2 port, ps::size4 value) { asm volatile ("outl %0, %1" : : "a"(value), "Nd"(port) ); }
   }
 
 
   template <typename I>
   constexpr
-  port<I>::port (std::uint16_t a) : address(a)
+  port<I>::port (ps::size2 a) : address(a)
   { }
 
   template <typename I>

@@ -1,7 +1,7 @@
 // Copyright (C) 2020 Pedro Lamarão <pedro.lamarao@gmail.com>. All rights reserved.
 
 
-#include <cstdint>
+#include <psys/integer.h>
 
 #include <multiboot2/header.h>
 #include <multiboot2/information.h>
@@ -70,7 +70,7 @@ extern "C"
 
 extern "C"
 [[gnu::fastcall]]
-void main ( std::uint32_t magic, multiboot2::information_list & mbi )
+void main ( ps::size4 magic, multiboot2::information_list & mbi )
 {
     if (magic != multiboot2::information_magic) {
         _test_result = 10;
@@ -85,7 +85,7 @@ void main ( std::uint32_t magic, multiboot2::information_list & mbi )
     }
 
     x86::set_interrupt_descriptor_table(interrupt_descriptor_table, 256);
-    std::uint64_t idt = x86::get_interrupt_descriptor_table();
+    auto idt = x86::get_interrupt_descriptor_table();
 
     // #TODO document this assert
     if ((256 * sizeof(interrupt_gate_descriptor)) != (idt & 0xFFFF)) {
@@ -94,7 +94,7 @@ void main ( std::uint32_t magic, multiboot2::information_list & mbi )
     }
 
     // #TODO document this assert
-    if (std::uint32_t(& interrupt_descriptor_table) != ((idt >> 16) & 0xFFFFFFFF)) {
+    if (ps::size4(& interrupt_descriptor_table) != ((idt >> 16) & 0xFFFFFFFF)) {
         _test_result = 30;
         return;
     }

@@ -1,7 +1,7 @@
 // Copyright (C) 2020 Pedro Lamarão <pedro.lamarao@gmail.com>. All rights reserved.
 
 
-#include <cstdint>
+#include <psys/integer.h>
 
 #include <multiboot2/header.h>
 #include <multiboot2/information.h>
@@ -39,7 +39,7 @@ extern "C"
 
 extern "C"
 [[gnu::fastcall]]
-void main ( std::uint32_t magic, multiboot2::information_list & response )
+void main ( ps::size4 magic, multiboot2::information_list & response )
 {
     if (magic != 0x36D76289) {
         _test_result = 1;

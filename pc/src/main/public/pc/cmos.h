@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <psys/integer.h>
 
 namespace pc
 {
@@ -10,12 +10,12 @@ namespace pc
 
     class rtc_status_a
     {
-        const std::uint8_t _value;
+        const ps::size1 _value;
 
     public:
 
         constexpr
-        rtc_status_a (std::uint8_t value) :
+        rtc_status_a (ps::size1 value) :
             _value { value }
         {
         }
@@ -27,13 +27,13 @@ namespace pc
         }
 
         constexpr
-        std::uint8_t frequency_divider () const
+        ps::size1 frequency_divider () const
         {
             return (_value & 0x70) >> 4;
         }
 
         constexpr
-        std::uint8_t rate_frequency () const
+        ps::size1 rate_frequency () const
         {
             return (_value & 0x0F);
         }
@@ -43,12 +43,12 @@ namespace pc
 
     class rtc_status_b
     {
-        const std::uint8_t _value;
+        const ps::size1 _value;
 
     public:
 
         constexpr
-        rtc_status_b (std::uint8_t value) :
+        rtc_status_b (ps::size1 value) :
             _value { value }
         {
         }
@@ -107,8 +107,8 @@ namespace pc
     template <template <typename Value> typename Port>
     class cmos
     {
-        Port<std::uint8_t> _command;
-        Port<std::uint8_t> _data;
+        Port<ps::size1> _command;
+        Port<ps::size1> _data;
 
     public:
 
@@ -122,14 +122,14 @@ namespace pc
         //! @brief CMOS Registers
         //! @{
 
-        std::uint8_t read (std::uint8_t index, bool nmi)
+        ps::size1 read (ps::size1 index, bool nmi)
         {
             _command.write((nmi ? 0x80 : 0) | (index & 0x7F));
             // #XXX: wait? how?
             return _data.read();
         }
 
-        void write (std::uint8_t index, bool nmi, std::uint8_t value)
+        void write (ps::size1 index, bool nmi, ps::size1 value)
         {
             _command.write((nmi ? 0x80 : 0) | (index & 0x7F));
             // #XXX: wait? how?

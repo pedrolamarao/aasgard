@@ -1,7 +1,7 @@
 // Copyright (C) 2020 Pedro Lamarão <pedro.lamarao@gmail.com>. All rights reserved.
 
 
-#include <cstdint>
+#include <psys/integer.h>
 
 #include <multiboot2/header.h>
 #include <multiboot2/information.h>
@@ -56,7 +56,7 @@ extern "C"
 
 extern "C"
 [[gnu::fastcall]]
-void main ( std::uint32_t magic, multiboot2::information_list & mbi )
+void main ( ps::size4 magic, multiboot2::information_list & mbi )
 {
     x86::set_global_descriptor_table(global_descriptor_table);
     // #XXX: verify
@@ -64,14 +64,14 @@ void main ( std::uint32_t magic, multiboot2::information_list & mbi )
     x86::reload_segment_registers(x86::segment_selector(1, false, 0), x86::segment_selector(2, false, 0));
     // #XXX: verify
 
-    std::uint64_t gdt = x86::get_global_descriptor_table();
+    auto gdt = x86::get_global_descriptor_table();
 
     if (((5 * sizeof(segment_descriptor)) - 1) != (gdt & 0xFFFF)) {
         _test_result = 30;
         return;
     }
 
-    if (std::uint32_t(& global_descriptor_table) != ((gdt >> 16) & 0xFFFFFFFF)) {
+    if (ps::size4(& global_descriptor_table) != ((gdt >> 16) & 0xFFFFFFFF)) {
         _test_result = 40;
         return;
     }

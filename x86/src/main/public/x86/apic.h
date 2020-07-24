@@ -9,27 +9,27 @@ namespace x86
 {
 	struct apic_location
 	{
-		std::uint32_t value;
-		std::uint32_t unused0;
-		std::uint32_t unused1;
-		std::uint32_t unused2;
+		ps::size4 value;
+		ps::size4 unused0;
+		ps::size4 unused1;
+		ps::size4 unused2;
 	};
 
 	struct apic_r_location : public apic_location
 	{
-		constexpr explicit operator std::uint32_t () const { return value; }
+		constexpr explicit operator ps::size4 () const { return value; }
 	};
 
 	struct apic_w_location : public apic_location
 	{
-		auto operator= (std::uint32_t x) -> apic_w_location & { value = x; return *this; }
+		auto operator= (ps::size4 x) -> apic_w_location & { value = x; return *this; }
 	};
 
 	struct apic_rw_location : public apic_location
 	{
-		constexpr explicit operator std::uint32_t () const { return value; }
+		constexpr explicit operator ps::size4 () const { return value; }
 
-		auto operator= (std::uint32_t x) -> apic_rw_location & { value = x; return *this; }
+		auto operator= (ps::size4 x) -> apic_rw_location & { value = x; return *this; }
 	};
 
 	struct apic_memory_map
@@ -59,13 +59,13 @@ namespace x86
 	}
 
 	constexpr inline
-	auto is_apic_enabled (std::uint64_t location) -> bool
+	auto is_apic_enabled (ps::size8 location) -> bool
 	{
 		return false;
 	}
 
 	constexpr inline
-	auto get_apic_memory_map (std::uint64_t location) -> apic_memory_map *
+	auto get_apic_memory_map (ps::size8 location) -> apic_memory_map *
 	{
 		return nullptr;
 	}

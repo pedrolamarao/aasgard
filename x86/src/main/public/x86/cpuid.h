@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <cstdint>
+#include <psys/integer.h>
 
 
 //! Declarations
@@ -25,31 +25,31 @@ namespace x86
     //! @pre has_cpuid()
     //! @pre id <= cpuid(0).a()
 
-    cpuid (std::uint32_t id, std::uint32_t extra) ;
+    cpuid (ps::size4 id, ps::size4 extra) ;
 
     //! @pre has_cpuid()
     //! @pre id <= cpuid(0).a()
 
-    cpuid (std::uint32_t id) ;
+    cpuid (ps::size4 id) ;
 
     constexpr
-    auto a () const -> std::uint32_t ;
+    auto a () const -> ps::size4 ;
 
     constexpr
-    auto b () const -> std::uint32_t ;
+    auto b () const -> ps::size4 ;
 
     constexpr
-    auto c () const -> std::uint32_t ;
+    auto c () const -> ps::size4 ;
 
     constexpr
-    auto d () const -> std::uint32_t ;
+    auto d () const -> ps::size4 ;
 
   private:
 
-    std::uint32_t eax;
-    std::uint32_t ebx;
-    std::uint32_t ecx;
-    std::uint32_t edx;
+    ps::size4 eax;
+    ps::size4 ebx;
+    ps::size4 ecx;
+    ps::size4 edx;
 
   };
 
@@ -92,7 +92,7 @@ namespace x86
 
     extern "C"
 	[[gnu::fastcall]]
-    void __read_cpuid (std::uint32_t leaf, std::uint32_t extra, cpuid & out);
+    void __read_cpuid (ps::size4 leaf, ps::size4 extra, cpuid & out);
 
   }
 
@@ -109,37 +109,37 @@ namespace x86
   }
 
   inline
-  cpuid::cpuid (std::uint32_t id, std::uint32_t extra) : eax(0), ebx(0), ecx(0), edx(0)
+  cpuid::cpuid (ps::size4 id, ps::size4 extra) : eax(0), ebx(0), ecx(0), edx(0)
   {
     internal::__read_cpuid(id, extra, (* this));
   }
 
   inline
-  cpuid::cpuid (std::uint32_t id) : cpuid(id, 0)
+  cpuid::cpuid (ps::size4 id) : cpuid(id, 0)
   {
 
   }
 
   inline constexpr
-  auto cpuid::a () const -> std::uint32_t
+  auto cpuid::a () const -> ps::size4
   {
     return eax;
   }
 
   inline constexpr
-  auto cpuid::b () const -> std::uint32_t
+  auto cpuid::b () const -> ps::size4
   {
     return ebx;
   }
 
   inline constexpr
-  auto cpuid::c () const -> std::uint32_t
+  auto cpuid::c () const -> ps::size4
   {
     return ecx;
   }
 
   inline constexpr
-  auto cpuid::d () const -> std::uint32_t
+  auto cpuid::d () const -> ps::size4
   {
     return edx;
   }
