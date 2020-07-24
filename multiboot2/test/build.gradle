@@ -2,3 +2,8 @@ plugins
 {
     id 'cpp'
 }
+
+check.dependsOn ':multiboot2:test:x86_32-elf:entry:qemuSystemTest'
+check.dependsOn ':multiboot2:test:x86_32-elf:minimal:qemuSystemTest'
+check.dependsOn ':multiboot2:test:x86_32-elf:smoke:qemuSystemTest'
+

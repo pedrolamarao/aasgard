@@ -32,8 +32,7 @@ subprojects
                 '-Werror', '-Wall'
             
             def linker = linkTask.get()
-            linker.linkerArgs.addAll '-fuse-ld=lld',
-                '-std=c++17', '-ffreestanding', '-nostdlib', 
+            linker.linkerArgs.addAll '-std=c++17', '-ffreestanding', '-nostdlib', 
                 '-Wl,-Ttext=0x1000'
     
             def suffix = binary.name.capitalize()

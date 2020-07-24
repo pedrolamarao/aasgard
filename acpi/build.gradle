@@ -3,7 +3,6 @@
 plugins
 {
     id 'cpp-library'
-    id 'cpp-unit-test'
 }
 
 // project
@@ -13,6 +12,8 @@ version '0.1.0-SNAPSHOT'
 
 library
 {
+    targetMachines = [ machines.linux.x86 ]
+
     linkage = [ Linkage.STATIC ]
     
     dependencies.api project(':psys')
@@ -23,12 +24,3 @@ library
     }
 }
 
-unitTest
-{
-    dependencies.implementation project(':googletest')
-
-    binaries.whenElementFinalized {
-        def compiler = compileTask.get()
-        compiler.compilerArgs.addAll '-stdlib=libc++', '-std=c++17'
-    }
-}

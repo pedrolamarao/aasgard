@@ -2,9 +2,8 @@
 
 plugins
 {
-	id 'aasgard.asm'
+    id 'aasgard.asm'
     id 'cpp-library'
-    id 'cpp-unit-test'
 }
 
 // project
@@ -15,25 +14,16 @@ version '0.1.0-SNAPSHOT'
 library
 {
     // #XXX: clang can't cross compile to system "any"
-    targetMachines = [ machines.linux.x86, machines.linux.x86_64 ]
+    targetMachines = [ machines.linux.x86 ]
 
     linkage = [ Linkage.STATIC ]
     
+    dependencies.api project(':psys')
+    
     binaries.whenElementFinalized {
     	def compiler = compileTask.get()
-    	compiler.compilerArgs.addAll '-stdlib=libc++', '-std=c++17', '-ffreestanding', '-Werror', '-Wall', '-Wno-unused-private-field'
+    	compiler.compilerArgs.addAll '-std=c++17', '-ffreestanding', '-Werror', '-Wall', '-Wno-unused-private-field'
     }
 }
 
-unitTest
-{
-    // #TODO: add support for x86(64)
-    targetMachines = [ machines.linux.x86 ]
-    
-    dependencies.implementation project(':googletest')
-
-    binaries.whenElementFinalized {
-        def compiler = compileTask.get()
-        compiler.compilerArgs.addAll '-stdlib=libc++', '-std=c++17', '-Werror'
-    }
-}
+check.dependsOn ':x86:test:check'

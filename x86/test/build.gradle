@@ -2,3 +2,11 @@ plugins
 {
     id 'cpp'
 }
+
+check.dependsOn ':x86:test:x86_32-elf-multiboot2:cpuid:qemuSystemTest'
+check.dependsOn ':x86:test:x86_32-elf-multiboot2:exception:qemuSystemTest'
+check.dependsOn ':x86:test:x86_32-elf-multiboot2:gdt:qemuSystemTest'
+check.dependsOn ':x86:test:x86_32-elf-multiboot2:idt:qemuSystemTest'
+check.dependsOn ':x86:test:x86_32-elf-multiboot2:main:qemuSystemTest'
+check.dependsOn ':x86:test:x86_32-elf-multiboot2:msr:qemuSystemTest'
+
