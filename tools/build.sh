@@ -43,6 +43,31 @@ env -C ${OBJ}/binutils-i686-pc-none-elf \
     make install \
     1>${OBJ}/binutils-i686-pc-none-elf.log 2>&1 ||
     exit $?
+
+echo Building GNU Binutils x86_64-pc-none-elf...
+
+if [ ! -d ${OBJ}/binutils-x86_64-pc-none-elf ]; then
+    
+    mkdir -p ${OBJ}/binutils-x86_64-pc-none-elf \
+        1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1 ||
+        exit $? 
+    
+    env -C ${OBJ}/binutils-x86_64-pc-none-elf \
+        ${SRC}/binutils-2.34/configure --prefix=${PREFIX} --target=x86_64-pc-elf --with-sysroot --disable-nls \
+        1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1 ||
+        exit $? 
+
+fi
+
+env -C ${OBJ}/binutils-x86_64-pc-none-elf \
+    make ${MFLAGS} \
+    1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1 ||
+    exit $? 
+
+env -C ${OBJ}/binutils-x86_64-pc-none-elf \
+    make install \
+    1>${OBJ}/binutils-x86_64-pc-none-elf.log 2>&1 ||
+    exit $?
     
 echo Building GNU GCC i686-pc-none-elf...
 
@@ -68,6 +93,31 @@ env -C ${OBJ}/gcc-i686-pc-none-elf \
     make install-gcc install-target-libgcc  \
     1>${OBJ}/gcc-i686-pc-none-elf.log 2>&1 ||
     exit $?
+    
+echo Building GNU GCC x86_64-pc-none-elf...
+
+if [ ! -d ${OBJ}/gcc-x86_64-pc-none-elf ]; then
+    
+    mkdir -p ${OBJ}/gcc-x86_64-pc-none-elf \
+        1>${OBJ}/gcc-x86_64-pc-none-elf.log 2>&1 ||
+        exit $? 
+    
+    env -C ${OBJ}/gcc-x86_64-pc-none-elf \
+        ${SRC}/gcc-10.2.0/configure --prefix=${PREFIX} --target=x86_64-pc-elf --without-headers --enable-languages=c,c++ --disable-nls --disable-bootstrap \
+        1>${OBJ}/gcc-x86_64-pc-none-elf.log 2>&1 ||
+        exit $? 
+
+fi
+
+env -C ${OBJ}/gcc-x86_64-pc-none-elf \
+    make all-gcc all-target-libgcc ${MFLAGS} \
+    1>${OBJ}/gcc-x86_64-pc-none-elf.log 2>&1 ||
+    exit $? 
+
+env -C ${OBJ}/gcc-x86_64-pc-none-elf \
+    make install-gcc install-target-libgcc  \
+    1>${OBJ}/gcc-x86_64-pc-none-elf.log 2>&1 ||
+    exit $?
 
 echo Building GNU GDB i686-pc-none-elf...
 
@@ -78,7 +128,7 @@ if [ ! -d ${OBJ}/gdb-i686-pc-none-elf ]; then
         exit $? 
     
     env -C ${OBJ}/gdb-i686-pc-none-elf \
-        ${SRC}/gdb-9.2/configure --prefix=${PREFIX} --target=i686-pc-elf \
+        ${SRC}/gdb-9.2/configure --prefix=${PREFIX} --target=i686-pc-elf --with-expat \
         1>${OBJ}/gdb-i686-pc-none-elf.log 2>&1 ||
         exit $? 
 
@@ -103,7 +153,7 @@ if [ ! -d ${OBJ}/gdb-x86_64-pc-none-elf ]; then
         exit $? 
     
     env -C ${OBJ}/gdb-x86_64-pc-none-elf \
-        ${SRC}/gdb-9.2/configure --prefix=${PREFIX} --target=x86_64-pc-elf \
+        ${SRC}/gdb-9.2/configure --prefix=${PREFIX} --target=x86_64-pc-elf --with-expat \
         1>${OBJ}/gdb-x86_64-pc-none-elf.log 2>&1 ||
         exit $? 
 

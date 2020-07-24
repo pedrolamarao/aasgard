@@ -11,5 +11,7 @@ dnf install \
  freetype-devel \
  unifont-fonts \
  glib2-devel \
- pixman-devel 
+ pixman-devel \
+ xorriso \
+ expat-devel
 
