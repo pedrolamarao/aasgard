@@ -11,7 +11,7 @@ plugins
 
 // project
 
-def foo = "${projectDir}/tools"
+def toolsDir = "${projectDir}/tools"
 
 subprojects 
 {
@@ -19,10 +19,10 @@ subprojects
     {
         toolChains 
         {
-            tools(Gcc)
+            gcc_x86_32(Gcc)
             {
                 eachPlatform {
-                    path "${foo}/usr/bin", "${foo}/usr/i686-pc-elf/bin"
+                    path "${toolsDir}/usr/bin", "${toolsDir}/usr/i686-pc-elf/bin"
                     assembler.executable 'i686-pc-elf-gcc'
                     cCompiler.executable 'i686-pc-elf-gcc'
                     cppCompiler.executable 'i686-pc-elf-g++'

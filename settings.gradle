@@ -15,11 +15,11 @@ includeBuild 'gradle-asm'
 includeBuild 'gradle-gdb'
 includeBuild 'gradle-grub'
 
+includeBuild 'gradle-qemu'
+
 // components
 
 include 'acpi'
-
-include 'googletest'
 
 include 'multiboot2'
 include 'multiboot2:test:x86_32-elf:entry'
