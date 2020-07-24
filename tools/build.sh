@@ -2,73 +2,72 @@
 
 # General settings
 
-PREFIX=${HOME}/tools
-SRC=${PREFIX}/src
-OBJ=${PREFIX}/obj
+TOOLS="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"    
+PREFIX=${TOOLS}/usr
+SRC=${TOOLS}/src
+OBJ=${TOOLS}/obj
+
+PATH=${PREFIX}/bin:${PATH}
 
 # Build settings
 
-export AR=llvm-ar-8
-export CC=clang
-export CFLAGS=-O2 
-export CXX=clang++
-export CXXFLAGS=-O2
-export LD=lld
-export LDFLAGS=
-export NM=llvm-nm-8
-export RANLIB=llvm-ranlib-8
-
-export BUILD_AR=$AR
-export BUILD_CC=$CC
-export BUILD_CFLAGS=$CFLAGS
-export BUILD_CXX=$CXX
-export BUILD_CXXFLAGS=$CXXFLAGS
-export BUILD_LD=$LD
-export BUILD_LDFLAGS=$LDFLAGS
-export BUILD_NM=$NM
-export BUILD_RANLIB=$RANLIB
-
-export TARGET_AR=$AR
-export TARGET_CC=$CC
-export TARGET_CFLAGS=$CFLAGS
-export TARGET_CXX=$CXX
-export TARGET_CXXFLAGS=$CXXFLAGS
-export TARGET_LD=$LD
-export TARGET_LDFLAGS=$LDFLAGS
-export TARGET_NM=$NM
-export TARGET_RANLIB=$RANLIB
-
-export MFLAGS=-j6
+CFLAGS=-O2
+CXXFLAGS=-O2
+MFLAGS=-j12
 
 echo Building...
 
 mkdir -p ${OBJ}
 
-echo Building LLVM...
+echo Building GNU Binutils i686-pc-none-elf...
 
-if [ ! -d ${OBJ}/llvm ]; then
-
-    mkdir -p ${OBJ}/llvm \
-        1>${OBJ}/llvm.log 2>&1 ||
+if [ ! -d ${OBJ}/binutils-i686-pc-none-elf ]; then
+    
+    mkdir -p ${OBJ}/binutils-i686-pc-none-elf \
+        1>${OBJ}/binutils-i686-pc-none-elf.log 2>&1 ||
         exit $? 
-   
-    cmake \
-        -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="${PREFIX}" -DLLVM_ENABLE_PROJECTS="libcxxabi;libcxx;clang;lld" \
-        -B "${OBJ}/llvm" "${SRC}/llvm-project-10.0.0/llvm" \
-        1>${OBJ}/llvm.log 2>&1 ||
+    
+    env -C ${OBJ}/binutils-i686-pc-none-elf \
+        ${SRC}/binutils-2.34/configure --prefix=${PREFIX} --target=i686-pc-elf --with-sysroot --disable-nls \
+        1>${OBJ}/binutils-i686-pc-none-elf.log 2>&1 ||
         exit $? 
 
 fi
 
-env -C ${OBJ}/llvm \
+env -C ${OBJ}/binutils-i686-pc-none-elf \
     make ${MFLAGS} \
-    1>${OBJ}/llvm.log 2>&1 ||
+    1>${OBJ}/binutils-i686-pc-none-elf.log 2>&1 ||
     exit $? 
 
-env -C ${OBJ}/llvm \
+env -C ${OBJ}/binutils-i686-pc-none-elf \
     make install \
-    1>${OBJ}/llvm.log 2>&1 ||
-	exit $?
+    1>${OBJ}/binutils-i686-pc-none-elf.log 2>&1 ||
+    exit $?
+    
+echo Building GNU GCC i686-pc-none-elf...
+
+if [ ! -d ${OBJ}/gcc-i686-pc-none-elf ]; then
+    
+    mkdir -p ${OBJ}/gcc-i686-pc-none-elf \
+        1>${OBJ}/gcc-i686-pc-none-elf.log 2>&1 ||
+        exit $? 
+    
+    env -C ${OBJ}/gcc-i686-pc-none-elf \
+        ${SRC}/gcc-10.2.0/configure --prefix=${PREFIX} --target=i686-pc-elf --without-headers --enable-languages=c,c++ --disable-nls --disable-bootstrap \
+        1>${OBJ}/gcc-i686-pc-none-elf.log 2>&1 ||
+        exit $? 
+
+fi
+
+env -C ${OBJ}/gcc-i686-pc-none-elf \
+    make all-gcc all-target-libgcc ${MFLAGS} \
+    1>${OBJ}/gcc-i686-pc-none-elf.log 2>&1 ||
+    exit $? 
+
+env -C ${OBJ}/gcc-i686-pc-none-elf \
+    make install-gcc install-target-libgcc  \
+    1>${OBJ}/gcc-i686-pc-none-elf.log 2>&1 ||
+    exit $?
 
 echo Building GNU GDB i686-pc-none-elf...
 
@@ -79,7 +78,7 @@ if [ ! -d ${OBJ}/gdb-i686-pc-none-elf ]; then
         exit $? 
     
     env -C ${OBJ}/gdb-i686-pc-none-elf \
-        ${SRC}/gdb-9.1/configure --prefix=${PREFIX} --target=i686-pc-elf \
+        ${SRC}/gdb-9.2/configure --prefix=${PREFIX} --target=i686-pc-elf \
         1>${OBJ}/gdb-i686-pc-none-elf.log 2>&1 ||
         exit $? 
 
@@ -104,7 +103,7 @@ if [ ! -d ${OBJ}/gdb-x86_64-pc-none-elf ]; then
         exit $? 
     
     env -C ${OBJ}/gdb-x86_64-pc-none-elf \
-        ${SRC}/gdb-9.1/configure --prefix=${PREFIX} --target=x86_64-pc-elf \
+        ${SRC}/gdb-9.2/configure --prefix=${PREFIX} --target=x86_64-pc-elf \
         1>${OBJ}/gdb-x86_64-pc-none-elf.log 2>&1 ||
         exit $? 
 
@@ -129,7 +128,7 @@ if [ ! -d ${OBJ}/grub-i386-pc ]; then
         exit $? 
     
     env -C ${OBJ}/grub-i386-pc \
-        ${SRC}/grub-2.04/configure --prefix=${PREFIX} --target=i386 --with-platform=pc \
+        ${SRC}/grub-2.04/configure --prefix=${PREFIX} --target=i386 --with-platform=pc --disable-werror \
         1>${OBJ}/grub-i386-pc.log 2>&1 ||
         exit $? 
 
@@ -154,7 +153,7 @@ if [ ! -d ${OBJ}/grub-i386-efi ]; then
         exit $? 
     
     env -C ${OBJ}/grub-i386-efi \
-        ${SRC}/grub-2.04/configure --prefix=${PREFIX} --target=i386 --with-platform=efi \
+        ${SRC}/grub-2.04/configure --prefix=${PREFIX} --target=i386 --with-platform=efi --disable-werror \
         1>${OBJ}/grub-i386-efi.log 2>&1 ||
         exit $? 
 
@@ -179,7 +178,7 @@ if [ ! -d ${OBJ}/grub-i386-qemu ]; then
         exit $? 
     
     env -C ${OBJ}/grub-i386-qemu \
-        ${SRC}/grub-2.04/configure --prefix=${PREFIX} --target=i386 --with-platform=qemu \
+        ${SRC}/grub-2.04/configure --prefix=${PREFIX} --target=i386 --with-platform=qemu --disable-werror \
         1>${OBJ}/grub-i386-qemu.log 2>&1 ||
         exit $? 
 
@@ -204,7 +203,7 @@ if [ ! -d ${OBJ}/grub-x86_64-efi ]; then
         exit $? 
     
     env -C ${OBJ}/grub-x86_64-efi \
-        ${SRC}/grub-2.04/configure --prefix=${PREFIX} --target=x86_64 --with-platform=efi \
+        ${SRC}/grub-2.04/configure --prefix=${PREFIX} --target=x86_64 --with-platform=efi --disable-werror \
         1>${OBJ}/grub-x86_64-efi.log 2>&1 ||
         exit $? 
 
@@ -229,7 +228,7 @@ if [ ! -d ${OBJ}/qemu ]; then
         exit $? 
     
     env -C ${OBJ}/qemu \
-        ${SRC}/qemu-4.2.0/configure --prefix=${PREFIX} --enable-plugins \
+        ${SRC}/qemu-5.0.0/configure --prefix=${PREFIX} --enable-plugins --enable-kvm \
         1>${OBJ}/qemu.log 2>&1 ||
         exit $? 
 

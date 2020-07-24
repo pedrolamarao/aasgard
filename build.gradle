@@ -11,13 +11,26 @@ plugins
 
 // project
 
+def foo = "${projectDir}/tools"
+
 subprojects 
 {
     model 
     {
         toolChains 
         {
-            tools(Clang)
+            tools(Gcc)
+            {
+                eachPlatform {
+                    path "${foo}/usr/bin", "${foo}/usr/i686-pc-elf/bin"
+                    assembler.executable 'i686-pc-elf-gcc'
+                    cCompiler.executable 'i686-pc-elf-gcc'
+                    cppCompiler.executable 'i686-pc-elf-g++'
+                    linker.executable 'i686-pc-elf-gcc'
+                    // linker.withArguments { args -> args << '-v' }
+                    staticLibArchiver.executable 'i686-pc-elf-ar'
+                }
+            }
         }
     }
     
