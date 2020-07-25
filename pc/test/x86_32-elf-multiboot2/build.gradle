@@ -48,6 +48,7 @@ subprojects
                 architecture = 'i386'
                 cdrom = grubRescue.get().target
                 gdb = 'tcp::12345'
+                rtc = '2020-07-24T22:46:00'
                 start = false
                 tool = "${toolsDir}/usr/bin/qemu-system-i386"
             }
@@ -66,6 +67,7 @@ subprojects
                         cdrom = grubRescue.get().target
                         gdb = 'tcp:localhost:12345'
                         display = 'none'
+                        rtc = '2020-07-24T22:46:00'
                         start = false
                         tool = "${toolsDir}/usr/bin/qemu-system-i386"
                     }
