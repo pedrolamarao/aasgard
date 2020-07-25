@@ -38,11 +38,20 @@ extern "C"
 //! Multiboot2 entry point
 
 extern "C"
-[[gnu::fastcall]]
-void main ( ps::size4 magic, multiboot2::information_list & response )
+void main ( ps::size4 magic, multiboot2::information_list * response )
 {
-    if (magic != 0x36D76289) {
-        _test_result = 1;
+    if (magic == 0) {
+        _test_result = 10;
+        return;
+    }
+    
+    if (response == 0) {
+        _test_result = 20;
+        return;
+    }
+
+    if (magic != multiboot2::information_magic) {
+        _test_result = 30;
         return;
     }
 

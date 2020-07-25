@@ -69,7 +69,6 @@ extern "C"
 //! Multiboot2 entry point
 
 extern "C"
-[[gnu::fastcall]]
 void main ( ps::size4 magic, multiboot2::information_list & mbi )
 {
     if (magic != multiboot2::information_magic) {

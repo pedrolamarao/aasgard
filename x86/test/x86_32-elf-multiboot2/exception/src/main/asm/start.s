@@ -8,11 +8,11 @@
 .global _start
 .type   _start, STT_FUNC
 _start:
-        movl    $(stack + 0x4000), %esp
+        movl    $(stack + STACK_SIZE), %esp
         pushl   $0
         popf
         pushl   %ebx
         pushl   %eax
-        movb    $0, _test_result
+        call    main
 loop:   hlt
         jmp     loop

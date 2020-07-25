@@ -55,7 +55,6 @@ extern "C"
 //! Multiboot2 entry point
 
 extern "C"
-[[gnu::fastcall]]
 void main ( ps::size4 magic, multiboot2::information_list & mbi )
 {
     x86::set_global_descriptor_table(global_descriptor_table);

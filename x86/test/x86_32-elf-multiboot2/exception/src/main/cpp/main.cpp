@@ -66,14 +66,8 @@ extern "C"
 //! Multiboot2 entry point
 
 extern "C"
-[[gnu::fastcall]]
 void main ( ps::size4 magic, multiboot2::information_list & mbi )
 {
-    if (magic != multiboot2::information_magic) {
-        _test_result = 1;
-        return;
-    }
-
     x86::set_global_descriptor_table(global_descriptor_table);
     x86::reload_segment_registers(x86::segment_selector(1, false, 0), x86::segment_selector(2, false, 0));
 
