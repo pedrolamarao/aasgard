@@ -22,7 +22,7 @@ library
     
     binaries.whenElementFinalized {
     	def compiler = compileTask.get()
-    	compiler.compilerArgs.addAll '-std=c++17', '-ffreestanding', '-Werror', '-Wall', '-Wno-unused-private-field'
+    	compiler.compilerArgs.addAll '-std=c++20', '-ffreestanding', '-Werror', '-Wall', '-Wno-unused-private-field'
     }
 }
 

@@ -30,11 +30,11 @@ subprojects
         binaries.whenElementFinalized { binary ->
         
             def compiler = compileTask.get()
-            compiler.compilerArgs.addAll '-std=c++17', '-ffreestanding', '-nostdinc',
+            compiler.compilerArgs.addAll '-std=c++20', '-ffreestanding', '-nostdinc',
                 '-Werror', '-Wall', '-Wno-unused-private-field'
             
             def linker = linkTask.get()
-            linker.linkerArgs.addAll '-std=c++17', '-ffreestanding', '-nostdlib', 
+            linker.linkerArgs.addAll '-std=c++20', '-ffreestanding', '-nostdlib', 
                 '-Wl,-Ttext=0x1000'
     
             def suffix = binary.name.capitalize()
