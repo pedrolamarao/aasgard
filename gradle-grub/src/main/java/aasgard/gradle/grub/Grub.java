@@ -46,7 +46,10 @@ public final class Grub
 		}
 		
 		ArrayList<String> command = new ArrayList<>();
-		command.add("grub-mkrescue");
+		if (spec.getTool().isPresent())
+			command.add(spec.getTool().get());
+		else
+			command.add("grub-mkrescue");	
 		add(command, "-o", "" + spec.getTarget().get());
         ifNotEmpty(spec.getInstall(), x -> add(command, "--install-modules=" + join(" ", x)));
         ifNotEmpty(spec.getLoad(), x -> add(command, "--modules=" + join(" ", x)));
@@ -57,12 +60,12 @@ public final class Grub
         command.add(spec.getSource().map(f -> "/program=" + f.getAsFile()).get());
         
         logger.info("GRUB rescue command: {}", join(" ", command));
-        
+                
         ProcessBuilder builder = new ProcessBuilder();
         builder.command(command);
         builder.redirectError(tmp.file("err.txt").getAsFile());
         builder.redirectOutput(tmp.file("out.txt").getAsFile());
-        
+
         return builder.start();
 	}
 

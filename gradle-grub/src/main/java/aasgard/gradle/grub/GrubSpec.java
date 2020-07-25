@@ -26,6 +26,8 @@ public abstract class GrubSpec
 	
 	public abstract RegularFileProperty getTarget ();
 	
+	public abstract Property<String> getTool ();
+	
 	public void configure (Action<? super GrubSpec> action)
 	{
 		action.execute(this);

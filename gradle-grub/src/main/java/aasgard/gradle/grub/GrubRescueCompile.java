@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.file.RegularFileProperty;
 import org.gradle.api.provider.ListProperty;
+import org.gradle.api.provider.Property;
 import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.InputFile;
 import org.gradle.api.tasks.OutputFile;
@@ -38,6 +39,9 @@ public abstract class GrubRescueCompile extends DefaultTask
 	@Input
 	public ListProperty<String> getLocales () { return spec.getLocales(); }
 	
+	@Input
+	public Property<String> getTool () { return spec.getTool(); }
+	
 	@InputFile
 	public RegularFileProperty getSource () { return spec.getSource(); }
 	
@@ -56,7 +60,7 @@ public abstract class GrubRescueCompile extends DefaultTask
 		spec.getTarget().set(
 			file.flatMap(f -> getProject().getLayout().getBuildDirectory().file("grub/bin/" + f.getAsFile() + "/rescue/image"))
 		);		
-	}	
+	}
 	
 	// action
 	
