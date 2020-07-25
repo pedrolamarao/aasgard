@@ -41,6 +41,7 @@ subprojects
     
             def grubRescue = grub.registerRescue("grubRescue${suffix}") {
                 executable binary
+                tool = "${toolsDir}/usr/bin/grub-mkrescue"
             }
             
             def qemuRescue = qemu.registerSystem("qemuRescue${suffix}") {
@@ -48,13 +49,14 @@ subprojects
                 cdrom = grubRescue.get().target
                 gdb = 'tcp::12345'
                 start = false
+                tool = "${toolsDir}/usr/bin/qemu-system-i386"
             }
             
             def gdbTest = gdb.testListener('_test_result')
             
             def gdbRescue = gdb.register("gdbRescue${suffix}") {
                 dependsOn grubRescue
-                executable = 'i686-pc-elf-gdb'
+                tool = "${toolsDir}/usr/bin/i686-pc-elf-gdb"
                 listeners.add gdbTest
                 listeners.add gdb.logListener(file("build/tmp/gdbRescue${suffix}/mi.txt"))
                 target = binary.executableFile
@@ -65,6 +67,7 @@ subprojects
                         gdb = 'tcp:localhost:12345'
                         display = 'none'
                         start = false
+                        tool = "${toolsDir}/usr/bin/qemu-system-i386"
                     }
                     push 'set output-radix 16'
                     push 'target remote localhost:12345'

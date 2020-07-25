@@ -11,7 +11,7 @@ plugins
 
 // project
 
-def toolsDir = "${projectDir}/tools"
+ext.toolsDir = "${projectDir}/tools"
 
 subprojects 
 {
