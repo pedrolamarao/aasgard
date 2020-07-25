@@ -34,20 +34,14 @@ namespace
 extern "C"
 {
     [[gnu::used]]
-    unsigned int _test_result = 0xFF;
+    unsigned char _test_result = 1;
 }
 
 //! Multiboot2 entry point
 
 extern "C"
-[[gnu::fastcall]]
 void main ( ps::size4 magic, multiboot2::information_list & mbi )
 {
-    if (magic != multiboot2::information_magic) {
-        _test_result = 1;
-        return;
-    }
-
     pc::cmos<x86::port> cmos;
 
     // CMOS RTC year

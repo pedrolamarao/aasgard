@@ -65,23 +65,15 @@ namespace
 extern "C"
 {
     [[gnu::used]]
-    ps::size4 _test_result = 0xFFFFFFFF;
+    unsigned char _test_result = 1;
 }
 
 //! Multiboot2 entry point
 
 extern "C"
-[[gnu::fastcall]]
 void main ( ps::size4 magic, multiboot2::information_list & mbi )
 {
     asm volatile ("cli");
-
-    // multiboot2
-
-    if (magic != multiboot2::information_magic) {
-        _test_result = 1;
-        return;
-    }
 
     // gdt
 
