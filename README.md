@@ -1,4 +1,4 @@
-Date: 2020-01-31
+Date: 2020-07-24
 
 # summary
 
@@ -8,68 +8,63 @@ Aasgard is a collection of components for programming the bare metal.
 
 It is designed for integration with state of the art tools.
 
-Try: `./gradlew check`
-
 # index
 
 0. summary
-1. assemble
-2. check
-3. use
-4. architecture
-5. references
+1. prepare
+2. assemble
+3. check
+4. use
+5. architecture
+6. references
 
-# build
+# prepare
 
-To assemble development artifacts: `./gradlew assemble`
+Aasgard is currently built using custom cross tools installed to prefix `${projectDir}/tools`.
+The build system is wired to use the tools at this prefix.
 
-To check development artifacts: `./gradlew check`
+To acquire the necessary sources, run `tools/src.sh`.
+This script requires `wget`.
 
-To clean all generated artifacts: `./gradlew clean`
+Next, you must install tool dependencies.
+For Fedora 32, run `tools/fedora.sh`.
+For Debian, run `tools/debian.sh`.
+These scripts we written based on experience.
+If the next step fails, maybe something is missing.
 
-## tools
+To build the tools, run `tools/build.sh`.
 
-These are the required tools.
+- GNU Binutils target `i386-pc-elf`
+- GNU Binutils target `x86_64-pc-elf`
+- GNU GCC languages C, C++ target `i386-pc-elf`
+- GNU GCC languages C, C++ target `x86_64-pc-elf`
+- GNU GDB target `i386-pc-elf`
+- GNU GDB target `x86_64-pc-elf`
+- GNU GRUB target `i386-pc`
+- GNU GRUB target ...
+- QEMU
 
-- GNU Binutils version 2.34 target (see below)
-- GNU GCC version 9.2 target (see below)
-- GNU GDB version 7.1 target (see below)
-- GNU GRUB version 2.04 target (see below)
-- OpenJDK version 11 host
+# assemble
 
-OpenJDK is required to run Gradle: we suggest AdoptOpenJDK builds.
+Aasgard's build system is based on Gradle exended with custom plugins.
+This system requires a JDK version 11.
+JRE is not enough to compile the custom plugins.
 
-Binutils, GCC and GDB are required for target `i686-pc-elf`.
+To assemble development artifacts, do `./gradlew assemble`
 
-GRUB is required for platforms `i386-qemu`, `i386-pc` and `i386-efi`.
-For more information on GRUB, see [README.grub.md](README.grub.md).
-
-There are useful scripts for building tools in [tools](tools).
-
-## issues
-
-- Gradle: [Assembler language support](https://github.com/gradle/gradle-native/issues/172)
-- Gradle: [Built in support for mingw multi-architecture compilation](https://github.com/gradle/gradle-native/issues/969) 
+To clean all generated artifacts, do `./gradlew clean`
 
 # check
 
-*TODO*: apply some technique for pure testing: running test programs in the host system with googletest. Requires multi tool support from Gradle.
+Aasgard is verified by a technique orchestrating QEMU and GDB to watch for "asserts".
 
-*TODO*: apply some technique for emulator testing: running test programs in an emulator, somehow verifying post conditions. Requires emulator support.
-
-*TODO*: apply some technique for integration testing: runnin test programs in actual metal, somehow verifying post conditions. Epic!
+To check development artifacts, do `./gradlew check`
 
 # use
 
-## targets
+Aasgard is reusable as Gradle subprojects.
 
-These are the currently supported targets:
-
-- `i686-pc-elf`
-
-## gradle
-
-Componets are Gradle projects meant for multi-project configurations.
+Each component is a maven-like module.
 
 To reuse one of the components, simply add a dependency on it:
 
