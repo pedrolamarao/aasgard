@@ -18,20 +18,20 @@ public abstract class GdbSpec
 	{
 		super();
 		getEnvironment().empty();
-		getExecutable().convention("gdb");
+		getTool().convention("gdb");
 	}
 	
 	// properties
 		
 	public abstract MapProperty<String, String> getEnvironment ();
-	
-	public abstract Property<String> getExecutable ();
 
 	public abstract ListProperty<GdbMiListener> getListeners ();
 	
 	public abstract Property<Action<? super GdbMiProcess>> getScript ();
 	
 	public abstract RegularFileProperty getTarget ();
+	
+	public abstract Property<String> getTool ();
 
 	// utilities
 	

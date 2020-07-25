@@ -20,7 +20,7 @@ public final class Gdb
 	public static void exec (GdbSpec spec) throws IOException
 	{
 		final var command = new ArrayList<String>();
-		addAll(command, spec.getExecutable().get(), "--nx", "--interpreter=mi");
+		addAll(command, spec.getTool().get(), "--nx", "--interpreter=mi");
 		ifPresent(spec.getTarget(), it -> addAll(command, "--se", it.toString()));
 		
 		logger.info("GDB command: {}", String.join(" ", command));

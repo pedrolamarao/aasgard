@@ -36,16 +36,16 @@ public abstract class GdbExec extends DefaultTask
 	public MapProperty<String, String> getEnvironment () { return spec.getEnvironment(); }
 	
 	@Input
-	public Property<String> getExecutable () { return spec.getExecutable(); }
+	public ListProperty<GdbMiListener> getListeners () { return spec.getListeners(); }
 	
 	@Input
-	public ListProperty<GdbMiListener> getListeners () { return spec.getListeners(); }
+	public Property<Action<? super GdbMiProcess>> getScript () { return spec.getScript(); }
 	
 	@InputFile
 	public RegularFileProperty getTarget () { return spec.getTarget(); }
 	
 	@Input
-	public Property<Action<? super GdbMiProcess>> getScript () { return spec.getScript(); }
+	public Property<String> getTool () { return spec.getTool(); }
 	
 	// accessors
 	
